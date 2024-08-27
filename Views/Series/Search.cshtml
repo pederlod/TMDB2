@@ -1,0 +1,44 @@
+﻿@model SeriesList
+
+<h2 class="searchResultHeader"> Series</h2>
+<!-- List of series. -->
+<div class="container">
+    <div class="row">
+        @if (Model.Series == null)
+        {
+            <p>Model is null.</p>
+        }
+        else if (Model.Series.Count == 0)
+        {
+            <p>No items found.</p>
+        }
+        else
+        {
+            @foreach (var item in Model.Series)
+            {
+                <div class="col-md-3 mb-4">
+
+                    <a href="/Series/Index?seriesId=@item.Id">
+
+                    <div class="card">
+                        
+                        <img src="https://image.tmdb.org/t/p/w500/@item.PosterPath" class="card-img-top" alt="@item.OriginalName ?? item.Name">
+                        <div class="card-body">
+                           
+                            
+                                <h5 class="card-title">
+
+                                    @item.OriginalName
+
+                                </h5>
+                                <p class="card-releasedate">@item.FirstAirDate</p>
+                                <p class="card-rating"><strong>Rating:</strong> @item.VoteAverage / 10</p>
+                            
+                        </div>
+                    </div>
+                    </a>
+                </div>
+            }
+        }
+    </div>
+</div>

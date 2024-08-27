@@ -1,0 +1,72 @@
+﻿@model TMDB2.Models.FavoriteList
+
+<div id="favorite-sidebar">
+    <h4>Your Favorites</h4>
+
+    <h5>Movies</h5>
+    <ul>
+        @foreach (var movie in Model.Movies)
+        {
+            <li>
+                <a href="@Url.Action("Index", "Movie", new { movieId = movie.Id })">
+                    <img src="https://image.tmdb.org/t/p/w92/@movie.PosterPath" alt="@movie.Title" class="poster-thumbnail" />
+                    @movie.Title
+                </a>
+                <button class="btn btn-danger btn-sm remove-favorite" data-id="@movie.Id" data-type="movie">X</button>
+            </li>
+        }
+    </ul>
+
+    <h5>Series</h5>
+    <ul>
+        @foreach (var series in Model.Series)
+        {
+            <li>
+                <a href="@Url.Action("Index", "Series", new { seriesId = series.Id })">
+                    <img src="https://image.tmdb.org/t/p/w92/@series.PosterPath" alt="@series.Name" class="poster-thumbnail" />
+                    @series.Name
+                </a>
+                <button class="btn btn-danger btn-sm remove-favorite" data-id="@series.Id" data-type="series">X</button>
+            </li>
+        }
+    </ul>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.remove-favorite').click(function () {
+            var id = $(this).data('id');
+            var type = $(this).data('type');
+            var data = {};
+
+            if (type === "movie") {
+                data.idmovies = id;
+            } else if (type === "series") {
+                data.idseries = id;
+            }
+
+            var url = (type === "movie")
+                ? '@Url.Action("RemoveFavoriteMovie", "Favorite")'
+                : '@Url.Action("RemoveFavoriteSeries", "Favorite")';
+
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: data, // Send the appropriate data based on the type
+                success: function (response) {
+                    if (response.success) {
+                        // Reload the sidebar by triggering the view component action
+                        $('#favorite-sidebar').load('/Favorite/UpdateFavoriteSidebar');
+                    } else {
+                        alert('Failed to update sidebar.');
+                    }
+                },
+                error: function () {
+                    alert('An error occurred while trying to remove from favorites');
+                }
+            });
+        });
+    });
+</script>
+

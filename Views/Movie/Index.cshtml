@@ -1,0 +1,85 @@
+﻿@model Movie
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@Model.Title - Movie Details</title>
+    <link rel="stylesheet" href="~/css/details.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Include jQuery -->
+</head>
+<body>
+    <div class="container">
+        <div class="movie-details">
+            <img src="https://image.tmdb.org/t/p/w500/@Model.PosterPath" alt="@Model.Title" class="poster" onerror="this.onerror=null; this.src='https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3396.jpg';">
+            <div class="info">
+                <h1 class="title">@Model.Title</h1>
+                <p class="tagline">@Model.Tagline</p>
+                <p class="overview">@Model.Overview</p>
+                <ul class="details">
+                    <li><strong>Release Date:</strong> @Model.ReleaseDate</li>
+                    <li><strong>Genres:</strong> @string.Join(", ", Model.Genres.Select(g => g.Name))</li>
+                    <li><strong>Rating:</strong> @Model.VoteAverage / 10</li>
+                    <li><strong>Runtime:</strong> @Model.Runtime minutes</li>
+                    <li><strong>Production Companies:</strong> @string.Join(", ", Model.ProductionCompanies.Select(pc => pc.Name))</li>
+                    <li><strong>Favorites:</strong> @Model.FavoriteAmount users have favorited this movie</li>
+                </ul>
+
+                <!-- Favorite Button -->
+                @if (User.Identity.IsAuthenticated)
+                {
+                    var isFavorite = ViewBag.IsFavorite as bool? ?? false;
+
+                    <button id="favoriteButton" class="btn @(isFavorite ? "btn-danger" : "btn-primary")"
+                            data-favorite="@(isFavorite ? "true" : "false")"
+                            data-movie-id="@Model.Id"
+                            data-movie-title="@Model.Title">
+                        @(isFavorite ? "Remove from Favorites" : "Add to Favorites")
+                    </button>
+                }
+                else
+                {
+                    <a class="btn btn-primary" asp-action="Login" asp-controller="User">Log in to favorite</a>
+                }
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#favoriteButton').click(function () {
+                var isFavorite = $(this).data('favorite') === "true";
+                var movieId = $(this).data('movie-id');
+                var movieTitle = $(this).data('movie-title');
+                var url = isFavorite ? '@Url.Action("RemoveFavoriteMovie", "Favorite")' : '@Url.Action("AddFavoriteMovie", "Favorite")';
+
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: { idmovies: movieId, title: movieTitle },
+                    success: function (response) {
+                        // Toggle the button text, class, and data attribute
+                        if (isFavorite) {
+                            $('#favoriteButton').removeClass('btn-danger').addClass('btn-primary');
+                            $('#favoriteButton').text('Add to Favorites');
+                            $('#favoriteButton').data('favorite', 'false'); // Update data-favorite attribute
+
+
+                        } else {
+                            $('#favoriteButton').removeClass('btn-primary').addClass('btn-danger');
+                            $('#favoriteButton').text('Remove from Favorites');
+                            $('#favoriteButton').data('favorite', 'true'); // Update data-favorite attribute
+
+                        
+                        }
+
+                        // I want to update the Favorite sidebar here, but for some reason the button functionality breaks when removing a favorite.
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+

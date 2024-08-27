@@ -1,0 +1,49 @@
+﻿@model PersonList
+
+<h2 class="searchResultHeader">People</h2>
+<!-- List of people. -->
+<div class="container">
+    <div class="row">
+        @if (Model.People == null)
+        {
+            <p>Model is null.</p>
+        }
+        else if (Model.People.Count == 0)
+        {
+            <p>No items found.</p>
+        }
+        else
+        {
+            @foreach (var item in Model.People)
+            {
+                <div class="col-md-3 mb-4">
+
+                    <a href="/Person/Index?personId=@item.Id">
+                        <!--<a href="@@Url.Action("Index", "Person", new { personId = Person.Id })">-->
+                    <div class="card">
+
+                        <img src="https://image.tmdb.org/t/p/w500/@item.ProfilePath" class="card-img-top" onerror="this.onerror=null; this.src='https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3396.jpg';">
+                        <div class="card-body">
+
+                                <h5 class="card-name">
+
+                                    @item.Name
+
+                                </h5>
+                           
+                        </div>
+                    </div>
+                    </a>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+<!--
+
+<img class="" src="https://media.themoviedb.org/t/p/w66_and_h66_face${data.profile_path}" alt="${data.name}" width="45" height="45" srcset="https://media.themoviedb.org/t/p/w66_and_h66_face${data.profile_path} 1x, https://media.themoviedb.org/t/p/w132_and_h132_face${data.profile_path} 2x">
+            # } else { #
+<div class="glyphicons_v2 picture profile ${gender_lookup[data.gender]} grey no_image_holder w45_and_h45"></div>
+-->
+

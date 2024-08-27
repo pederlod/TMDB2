@@ -1,0 +1,24 @@
+﻿# What to ignore from/to git.
+*.vs/
+*.user
+*.suo
+*.dbmdl
+*.jfm
+*.pdb
+*.cache
+*.log
+*.bak
+*.ncb
+*.swp
+*.designer.cs
+*.ClassDiagram.cd
+*.vcproj.*.user
+*.csproj.user
+*.csproj.vspscc
+*.csproj.webinfo
+*.sln.docstates
+*.userprefs
+*.csproj.min.cs
+packages/
+bin/
+obj/

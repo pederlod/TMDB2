@@ -1,0 +1,141 @@
+﻿/*TODO:     Find a way to override the autofill psuedoclass*/
+
+
+/*Entire Sidebar*/
+.sidebar {
+    margin-top: 45px; /* Ensure sidebar starts below the navbar */
+    position: fixed;
+    top: 40px; /* Account for the navbar height */
+    left: 0px;
+    width: 250px;
+    height: calc(100% - 70px);
+    background-color: #41484f;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    overflow-y: auto;
+}
+/* From Darkest to ligthest cheatsheet:
+
+#1a1c1f
+#272c30
+#41484f
+#5c656e
+#8d97a1
+#d8e0e8
+
+*/
+.search-form {
+    display: flex;
+    flex-direction: column;
+    margin-right: 3px;
+    color: ghostwhite;
+}
+    /*Search... input*/
+    .search-form input[type="text"],
+    .search-form input[type="number"] {
+        margin-bottom: 10px;
+        padding: 10px;
+        font-size: 16px;
+        color: white;
+        background-color: #8d97a1;
+        width: 210px;
+    }
+    .search-form input[type="text"]::placeholder,
+    .search-form input[type="number"]::placeholder {
+        color: lightgray;
+    }
+
+        /*checkbox  TODO: make the checked grey and not blue*/
+    .search-form input[type="checkbox"] {
+        margin-right: 10px;
+        width: 20px;
+        height: 20px;
+        background: #d8e0e8;
+        border-radius: 5px;
+        border: 2px solid #555;
+        
+
+    }
+    .search-form input[type="checkbox"]:checked {
+        background-color: #d8e0e8;
+    }
+
+    /*Border around buttons*/
+    .search-form .toggle-buttons {
+        display: flex;
+        align-items: stretch;
+        flex-direction: row;
+        margin-bottom: 10px;
+        margin-left: 0px;
+        max-width: 100%;
+        min-width: 100%;
+    }
+
+        .search-form .toggle-buttons input[type="radio"] {
+            display: none;
+            
+        }
+        /*Movies, Series, People. Base*/
+        .search-form .toggle-buttons label {
+            padding: 8px;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            background-color: #5c656e;
+            border: 1px solid #41484f;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: center;
+            margin-bottom: 5px;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.5);
+            margin-right: 5px;
+        }
+        /*Movies, Series, People. When Selected*/
+        .search-form .toggle-buttons input[type="radio"]:checked + label {
+            background-color: #1a1c1f;
+            color: white;
+            border-color: white;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.5);
+
+        }
+        /*Search button*/
+    .search-form button {
+        padding: 10px;
+        font-size: 16px;
+        background-color: #272c30;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        box-shadow: 2px 0 5px rgba(0,0,0,0.5);
+    }
+
+#advancedSearchOptions {
+    margin-top: 10px;
+}
+
+#advancedSearchToggle {
+    margin-top: 20px;
+    font-size: 15px;
+    margin-left: 3px;
+    
+    /* toggle to see area of chackbox.... still havent managed to allign the text and the box*/
+    /*
+    width: 180px;
+    height: 30px;
+    background-color: red;
+    border-radius: 5px;
+    border: 3px solid lightgray;
+    */
+}
+
+/* giving the text a seperate ID didnt work either
+#advancedSearchCheckboxText {
+
+    padding-top: px;
+    
+}
+*/
+
+.hidden-element {
+    visibility: hidden;
+}

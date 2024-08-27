@@ -1,0 +1,63 @@
+﻿<!-- For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860 -->
+
+@model MovieList
+
+<h2 class ="searchResultHeader">Movies</h2>
+<!-- List of movies. TODO trending as default when no search is made -->
+<div class="container">
+    <div class="row">
+        @if (Model.Movies == null)
+        {
+            <p>Model is null.</p>
+        }
+        else if (Model.Movies.Count == 0)
+        {
+            <p>No items found.</p>
+        }
+        else
+        {
+            @foreach (var item in Model.Movies)
+            {
+                
+                <div class="col-md-3 mb-4">
+                    <a href="/Movie/Index?movieId=@item.Id">
+                    <div class="card">
+                            <img src="https://image.tmdb.org/t/p/w500/@item.PosterPath" class="card-img-top" onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/f/fc/No_picture_available.png';">
+                            <div class="card-body">
+
+                            
+                                    <h5 class="card-title">
+                                    
+                                        @item.Title
+
+                                    </h5>
+                                    <p class=" card-releasedate">@item.ReleaseDate ...</p>
+                                    <p class="card-rating"><strong>Rating:</strong> @item.VoteAverage / 10</p>
+                            
+                            </div>
+
+                    </div>
+                    </a>
+                </div>
+               
+            }
+        }
+    </div>
+</div>
+
+
+
+
+
+<!-- Saved for eventual list of both movies and series
+
+
+@@if (!string.IsNullOrEmpty(item.Title))
+{
+    @@item.Title
+}
+else if (!string.IsNullOrEmpty(item.Name))
+{
+    @@item.Name
+}
+-->

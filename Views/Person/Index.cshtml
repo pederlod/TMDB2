@@ -1,0 +1,23 @@
+﻿@model Person
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@Model.Name - Name</title>
+    <link rel="stylesheet" href="~/css/details.css">
+</head>
+<body>
+    <div class="container">
+        <div class="person-details">
+            <img src="https://image.tmdb.org/t/p/w500/@Model.ProfilePath" alt="@Model.Name" class="poster" onerror="this.onerror=null; this.src='https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3396.jpg';">
+            <div class="info">
+                <h1 class="Name">@Model.Name</h1>
+                <p class="tagline">@Model.AlsoKnownAs</p>
+                <p class="overview">@Model.Biography</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

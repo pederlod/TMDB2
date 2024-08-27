@@ -1,0 +1,91 @@
+﻿@{
+    Layout = null;
+}
+
+<div class="search-form">
+
+    <form id="searchForm" method="get">
+        <input type="text" id="query" name="query" placeholder="Search..." />
+
+        <div class="toggle-buttons">
+            <input type="radio" id="searchMovies" name="searchType" value="Movies" checked />
+            <label for="searchMovies">Movies</label>
+            <input type="radio" id="searchSeries" name="searchType" value="Series" />
+            <label for="searchSeries">Series</label>
+            <input type="radio" id="searchPeople" name="searchType" value="People" />
+            <label for="searchPeople">People</label>
+        </div>
+
+
+        <button type="submit">Search</button>
+
+        <div id="advancedSearchToggle" style="display: none;">
+            <input type="checkbox" id="advancedSearchCheckbox" />
+            <label for="advancedSearchCheckbox" id="advancedSearchCheckboxText"><q>Advanced</q> Search</label>
+        </div>
+
+        <div id="advancedSearchOptions" style="display: none;">
+            <span>Genre</span>
+            <input type="text" id="genre" name="genre" placeholder="(e.g., Action)" />
+            <span>Actor</span>
+            <input type="text" id="actor" name="actor" placeholder="(e.g., Elijah Wood)" />
+            <span>Release Year</span>
+            <input type="number" id="year" name="year" placeholder="(e.g., 2003)" />
+        </div>
+
+        
+    </form>
+</div>
+
+<script>
+    document.getElementById('searchForm').onsubmit = function () {
+        var searchType = document.querySelector('input[name="searchType"]:checked').value;
+        if (searchType === "Movies") {
+            this.action = '@Url.Action("Search", "Movie")';
+        } else if (searchType === "Series") {
+            this.action = '@Url.Action("Search", "Series")';
+        } else {
+            this.action = '@Url.Action("Search", "Person")';
+        }
+        return true;
+    };
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var searchTypeButtons = document.querySelectorAll('input[name="searchType"]');
+        var advancedSearchToggle = document.getElementById('advancedSearchToggle');
+        var advancedSearchCheckbox = document.getElementById('advancedSearchCheckbox');
+        var advancedSearchOptions = document.getElementById('advancedSearchOptions');
+        var queryField = document.getElementById('query');
+
+        function toggleAdvancedSearchVisibility() {
+            if (document.getElementById('searchMovies').checked) {
+                advancedSearchToggle.style.display = 'block';
+            } else {
+                advancedSearchToggle.style.display = 'none';
+                advancedSearchOptions.style.display = 'none';
+                queryField.classList.remove('hidden-element');
+                queryField.style.display = 'block';
+                advancedSearchCheckbox.checked = false;
+            }
+        }
+
+        function toggleAdvancedSearchOptions() {
+            if (advancedSearchCheckbox.checked) {
+                advancedSearchOptions.style.display = 'block';
+                queryField.classList.add('hidden-element');
+            } else {
+                advancedSearchOptions.style.display = 'none';
+                queryField.classList.remove('hidden-element');
+            }
+        }
+
+        searchTypeButtons.forEach(button => {
+            button.addEventListener('change', toggleAdvancedSearchVisibility);
+        });
+
+        advancedSearchCheckbox.addEventListener('change', toggleAdvancedSearchOptions);
+
+        // Initialize the visibility based on the default selected option
+        toggleAdvancedSearchVisibility();
+    });
+</script>

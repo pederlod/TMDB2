@@ -1,0 +1,74 @@
+﻿/* From Darkest to ligthest cheatsheet:
+
+#1a1c1f
+#272c30
+#41484f
+#5c656e
+#8d97a1
+#d8e0e8
+
+*/
+
+
+.container {
+    float: left;
+    width: 90%;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 8px;
+    /* for å se containeren om jeg ønsker
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    */
+}
+
+.movie-details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.poster {
+    
+    width: 30%;
+    height: auto;
+    border-bottom: 1px solid #333;
+    margin-bottom: 20px;
+    border-radius: 0px;
+}
+
+.info {
+    width: 100%;
+    text-align: center;
+}
+
+.title {
+    font-size: 2em;
+    margin: 0;
+}
+
+.tagline {
+    font-size: 1.2em;
+    color: #b3b3b3;
+    margin: 10px 0;
+}
+
+.overview {
+    font-size: 1em;
+    line-height: 1.5;
+    margin: 20px 0;
+}
+
+.details {
+    list-style: none;
+    padding: 0;
+    text-align: left;
+}
+
+    .details li {
+        margin-bottom: 10px;
+    }
+
+        .details li strong {
+            color: #ffffff;
+        }

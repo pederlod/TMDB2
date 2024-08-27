@@ -1,0 +1,33 @@
+﻿@model TMDB2.Models.FavoriteList
+
+<div class="container">
+    <h2>Your Favorites</h2>
+
+    <h3>Movies</h3>
+    <ul>
+        @foreach (var movie in Model.Movies)
+        {
+            <li>
+                @movie.Title
+                <form asp-action="RemoveFavoriteMovie" method="post" style="display:inline;">
+                    <input type="hidden" name="idmovies" value="@movie.Id" />
+                    <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                </form>
+            </li>
+        }
+    </ul>
+
+    <h3>Series</h3>
+    <ul>
+        @foreach (var series in Model.Series)
+        {
+            <li>
+                @series.Name
+                <form asp-action="RemoveFavoriteSeries" method="post" style="display:inline;">
+                    <input type="hidden" name="idseries" value="@series.Id" />
+                    <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                </form>
+            </li>
+        }
+    </ul>
+</div>

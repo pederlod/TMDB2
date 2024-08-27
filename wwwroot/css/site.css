@@ -1,0 +1,39 @@
+/* From Darkest to ligthest cheatsheet:
+
+#1a1c1f
+#272c30
+#41484f
+#5c656e
+#8d97a1
+#d8e0e8
+
+*/
+
+/* Custom styles for the navbar */
+.navbar {
+    z-index: 100; /* Nav bar in front */
+}
+
+.searchResultHeader {
+    font-size: 70px;
+    text-align: center;
+    margin-top: 1px;
+    margin-bottom: 20px;
+    z-index: 101; /* not working as intended*/
+}
+
+.container-fluid {
+    padding-top: 30px; /* Height of the fixed navbar */
+}
+
+.content {
+    margin-left: 270px;
+    padding: 20px;
+}
+
+body {
+    background-color: #5c656e; 
+    color: ghostwhite; 
+    font-family: 'Comic Sans MS'; /* Default font here */
+    margin-top: 5px; /* Adjust in case of navbar bamboozle */
+}

@@ -1,0 +1,116 @@
+﻿/* From Darkest to ligthest cheatsheet:
+
+#1a1c1f
+#272c30
+#41484f
+#5c656e
+#8d97a1
+#d8e0e8
+
+*/
+
+
+/* Wrapper to contain sidebar and main content */
+.wrapper {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Content area next to the sidebar */
+.content {
+    margin-right: 270px; /* Adjust margin to make room for the sidebar */
+    padding: 20px;
+    width: 100%;
+}
+
+/* Sidebar style */
+#favorite-sidebar {
+    width: 250px;
+    color: ghostwhite;
+    background-color: #41484f;
+    padding: 20px;
+    position: fixed; /* Fixed sidebar */
+    top: 80px;
+    right: 0;
+    height: 100%; /* Full height */
+    overflow-y: auto; /* Scrollable content */
+}
+
+
+/* Custom Navbar Background Color */
+.navbar.bg-primary {
+    background-color: #272c30 !important; /* Customize the blue color here */
+}
+
+/* Custom Navbar Text Color */
+.navbar .navbar-nav .nav-link {
+    color: white !important; /* Ensure the nav link text is white */
+}
+
+    .navbar .navbar-nav .nav-link:hover {
+        color: #cccccc !important; /* Light gray color on hover */
+    }
+
+.navbar-brand {
+    color: white !important; /* Ensure the brand text is also white */
+}
+
+
+
+/* Ensure navbar brand behaves as intended */
+a.navbar-brand {
+    white-space: nowrap; /* Keep it all on one line */
+    text-align: left; /* Align to left by default */
+    word-break: normal; /* Don't break words unnecessarily */
+}
+
+/* Ensure anchor tag colors are set correctly */
+a {
+    color: white; /* Ensures links in the navbar remain white */
+}
+
+/* Primary button styling */
+.btn-primary {
+    color: white; /* Button text color */
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+/* Nav pills styling (if used elsewhere) */
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+    color: white;
+    background-color: gray;
+    border-color: #1861ac;
+}
+
+
+
+/* Border and box-shadow styles */
+.border-top {
+    border-top: 1px solid #e5e5e5;
+}
+
+.border-bottom {
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.box-shadow {
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+/* Footer styling */
+.footer {
+    position: relative; /* Ensure footer isn't fixed unless necessary */
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 25px;
+    background-color: gray;
+    color: red; /* Adjust if this doesn't match the design */
+    height: 2em;
+}
+
+/* Clean up footer overflow styles
+color: #707070;
+font-size: small;
+ */
