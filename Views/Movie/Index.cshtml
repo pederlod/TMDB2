@@ -29,8 +29,6 @@
                 <!-- Favorite Button -->
                 @if (User.Identity.IsAuthenticated)
                 {
-
-                    <!-- Not working as intended. allthough the visuals are shown correctly, the first click allways attempts to add to favorites, regardless of if its allready favorited-->
                     var isFavorite = ViewBag.IsFavorite as bool? ?? false;
 
                     <button id="favoriteButton" class="btn @(isFavorite ? "btn-danger" : "btn-primary")"
@@ -50,39 +48,88 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
+            function refreshSidebar() {
+                console.log("Refreshing Sidebar...");
+                $('#favorite-sidebar').load('/Favorite/UpdateFavoriteSidebar', function () {
+                    console.log("Sidebar refreshed.");
+                    // Unbind any existing event handlers to prevent double binding
+                    $('.remove-favorite').off('click').on('click', function () {
+                        console.log("Remove button clicked.");
+                        var id = $(this).data('id');
+                        var type = $(this).data('type');
+                        var data = {};
+
+                        if (type === "movie") {
+                            data.idmovies = id;
+                        } else if (type === "series") {
+                            data.idseries = id;
+                        }
+
+                        var url = (type === "movie")
+                            ? '@Url.Action("RemoveFavoriteMovie", "Favorite")'
+                            : '@Url.Action("RemoveFavoriteSeries", "Favorite")';
+
+                        console.log("Sending AJAX request to remove favorite.");
+                        $.ajax({
+                            type: "POST",
+                            url: url,
+                            data: data,
+                            success: function (response) {
+                                if (response.success) {
+                                    console.log("Successfully removed. Refreshing sidebar...");
+                                    refreshSidebar(); // Recursively refresh the sidebar
+                                } else {
+                                    alert('Failed to remove from favorites.');
+                                }
+                            },
+                            error: function () {
+                                alert('An error occurred while trying to remove from favorites');
+                            }
+                        });
+                    });
+                });
+            }
+
             $('#favoriteButton').click(function () {
+                console.log("Favorite button clicked.");
                 var isFavorite = $(this).data('favorite') === "true";
                 var movieId = $(this).data('movie-id');
                 var movieTitle = $(this).data('movie-title');
                 var url = isFavorite ? '@Url.Action("RemoveFavoriteMovie", "Favorite")' : '@Url.Action("AddFavoriteMovie", "Favorite")';
+
+                // Prevent multiple clicks (disable the button temporarily)
+                $('#favoriteButton').prop('disabled', true);
 
                 $.ajax({
                     type: "POST",
                     url: url,
                     data: { idmovies: movieId, title: movieTitle },
                     success: function (response) {
-                        // Not working as intended. Toggle the button text, class, and data attribute. When you add or remove something from favorite, the button should swap.
+                        // Toggle the button text, class, and data attribute
                         if (isFavorite) {
                             $('#favoriteButton').removeClass('btn-danger').addClass('btn-primary');
                             $('#favoriteButton').text('Add to Favorites');
-                            $('#favoriteButton').data('favorite', 'false'); // Update data-favorite attribute
-
-
+                            $('#favoriteButton').data('favorite', 'false');
                         } else {
                             $('#favoriteButton').removeClass('btn-primary').addClass('btn-danger');
                             $('#favoriteButton').text('Remove from Favorites');
-                            $('#favoriteButton').data('favorite', 'true'); // Update data-favorite attribute
-
-                        
+                            $('#favoriteButton').data('favorite', 'true');
                         }
-
-                        // I want to update the Favorite sidebar here, but for some reason the button functionality breaks when removing a favorite.
-
+                        console.log("Sidebar will now refresh after favorite toggle.");
+                        refreshSidebar(); // Refresh the sidebar after toggling favorite status
+                    },
+                    complete: function () {
+                        // Re-enable the button after the operation is complete
+                        $('#favoriteButton').prop('disabled', false);
                     }
                 });
             });
+
+            // Ensure sidebar is refreshed after document load
+            refreshSidebar();
         });
+    </script>
+
     </script>
 </body>
 </html>
-

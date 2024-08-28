@@ -9,7 +9,14 @@
         {
             <li>
                 <a href="@Url.Action("Index", "Movie", new { movieId = movie.Id })">
-                    <img src="https://image.tmdb.org/t/p/w92/@movie.PosterPath" alt="@movie.Title" class="poster-thumbnail" />
+                    @if (!string.IsNullOrEmpty(movie.PosterPath))
+                    {
+                        <img src="https://image.tmdb.org/t/p/w92/@movie.PosterPath" alt="@movie.Title" class="poster-thumbnail" />
+                    }
+                    else
+                    {
+                        <img src="https://via.placeholder.com/92x138?text=No+Image" alt="No Image" class="poster-thumbnail" />
+                    }
                     @movie.Title
                 </a>
                 <button class="btn btn-danger btn-sm remove-favorite" data-id="@movie.Id" data-type="movie">X</button>
@@ -23,7 +30,14 @@
         {
             <li>
                 <a href="@Url.Action("Index", "Series", new { seriesId = series.Id })">
-                    <img src="https://image.tmdb.org/t/p/w92/@series.PosterPath" alt="@series.Name" class="poster-thumbnail" />
+                    @if (!string.IsNullOrEmpty(series.PosterPath))
+                    {
+                        <img src="https://image.tmdb.org/t/p/w92/@series.PosterPath" alt="@series.Name" class="poster-thumbnail" />
+                    }
+                    else
+                    {
+                        <img src="https://via.placeholder.com/92x138?text=No+Image" alt="No Image" class="poster-thumbnail" />
+                    }
                     @series.Name
                 </a>
                 <button class="btn btn-danger btn-sm remove-favorite" data-id="@series.Id" data-type="series">X</button>
@@ -32,7 +46,6 @@
     </ul>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
         $('.remove-favorite').click(function () {
@@ -56,10 +69,10 @@
                 data: data, // Send the appropriate data based on the type
                 success: function (response) {
                     if (response.success) {
-                        // Reload the sidebar by triggering the view component action
-                        $('#favorite-sidebar').load('/Favorite/UpdateFavoriteSidebar');
+                        // Reload the sidebar content
+                        $('#favorite-sidebar').load('@Url.Action("UpdateFavoriteSidebar", "Favorite")');
                     } else {
-                        alert('Failed to update sidebar.');
+                        alert('Failed to remove from favorites');
                     }
                 },
                 error: function () {
@@ -69,4 +82,3 @@
         });
     });
 </script>
-

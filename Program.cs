@@ -4,7 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using TMDB2.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using TMDB2.Services;
 using TMDB2.Models;
 
 var builder = WebApplication.CreateBuilder(args);

@@ -4,8 +4,10 @@ using TMDB2.Models;
 using System.Linq;
 using System;
 using Microsoft.EntityFrameworkCore;
-using TMDB2.ViewComponents.Components;
-
+using static Mysqlx.Error.Types;
+//using TMDB2.ViewComponents.Components;
+//Error (active)	CS0234	The type or namespace name 'ViewComponents' does not exist in the namespace 'TMDB2' (are you missing an assembly reference?)
+//What???
 public class FavoriteController : Controller
 {
     private readonly MyDbContext _context;
@@ -141,6 +143,7 @@ public class FavoriteController : Controller
             _context.FavoriteMovies.Remove(favoriteMovie);
             _context.SaveChanges();
 
+            Console.WriteLine($"Succesfully removed favorite movie. UserId: {userId}, MovieId: {idmovies}");
 
             return Json(new { success = true });
         
