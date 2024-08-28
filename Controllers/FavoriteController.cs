@@ -91,7 +91,7 @@ public class FavoriteController : Controller
         _context.FavoriteMovies.Add(favoriteMovie);
         _context.SaveChanges();
 
-        UpdateFavoriteSidebar();
+       
 
         return Json(new { success = true });
     }
@@ -119,7 +119,7 @@ public class FavoriteController : Controller
         _context.FavoriteSeries.Add(new FavoriteSeries { Iduser = userId, Idseries = idseries });
         _context.SaveChanges();
 
-        UpdateFavoriteSidebar();
+        
 
         return Json(new { success = true });
     }
@@ -141,7 +141,6 @@ public class FavoriteController : Controller
             _context.FavoriteMovies.Remove(favoriteMovie);
             _context.SaveChanges();
 
-            UpdateFavoriteSidebar();
 
             return Json(new { success = true });
         
@@ -168,7 +167,7 @@ public class FavoriteController : Controller
             _context.FavoriteSeries.Remove(favoriteSeries);
             _context.SaveChanges();
 
-            UpdateFavoriteSidebar();
+           
 
             return Json(new { success = true });
         }

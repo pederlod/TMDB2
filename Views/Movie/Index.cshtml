@@ -29,6 +29,8 @@
                 <!-- Favorite Button -->
                 @if (User.Identity.IsAuthenticated)
                 {
+
+                    <!-- Not working as intended. allthough the visuals are shown correctly, the first click allways attempts to add to favorites, regardless of if its allready favorited-->
                     var isFavorite = ViewBag.IsFavorite as bool? ?? false;
 
                     <button id="favoriteButton" class="btn @(isFavorite ? "btn-danger" : "btn-primary")"
@@ -59,7 +61,7 @@
                     url: url,
                     data: { idmovies: movieId, title: movieTitle },
                     success: function (response) {
-                        // Toggle the button text, class, and data attribute
+                        // Not working as intended. Toggle the button text, class, and data attribute. When you add or remove something from favorite, the button should swap.
                         if (isFavorite) {
                             $('#favoriteButton').removeClass('btn-danger').addClass('btn-primary');
                             $('#favoriteButton').text('Add to Favorites');
@@ -75,6 +77,7 @@
                         }
 
                         // I want to update the Favorite sidebar here, but for some reason the button functionality breaks when removing a favorite.
+
                     }
                 });
             });

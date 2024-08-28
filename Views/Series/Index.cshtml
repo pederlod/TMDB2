@@ -31,7 +31,7 @@
                     <li><strong>Favorites:</strong> @Model.FavoriteAmount users have favorited this series</li>
                 </ul>
 
-                <!-- Favorite Button -->
+                <!-- Not working as intended. allthough the visuals are shown correctly, the first click allways attempts to add to favorites, regardless of if its allready favorited-->
                 @if (User.Identity.IsAuthenticated)
                 {
                     var isFavorite = ViewBag.IsFavorite as bool? ?? false;
@@ -64,7 +64,7 @@
                     url: url,
                     data: { idseries: seriesId, title: seriesTitle },
                     success: function (response) {
-                        // Toggle the button text, class, and data attribute
+                        // Not working as intended. Toggle the button text, class, and data attribute. When you add or remove something from favorite, the button should swap.
                         if (isFavorite) {
                             $('#favoriteButton').removeClass('btn-danger').addClass('btn-primary');
                             $('#favoriteButton').text('Add to Favorites');
