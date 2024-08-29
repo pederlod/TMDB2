@@ -138,8 +138,12 @@ public class FavoriteController : Controller
         var favoriteMovie = _context.FavoriteMovies
             .FirstOrDefault(fm => fm.Iduser == userId && fm.Idmovies == idmovies);
 
+        Console.WriteLine($"just some text to check if two removals are called asynchronously");
+
         if (favoriteMovie != null)
         {
+            Console.WriteLine($"FavoriteMovie is not null");
+
             _context.FavoriteMovies.Remove(favoriteMovie);
             _context.SaveChanges();
 
