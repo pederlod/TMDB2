@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Views\Series\Index.cshtml" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\favoriteSidebar.css" />
   </ItemGroup>
 
 </Project>
