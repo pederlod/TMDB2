@@ -1,4 +1,9 @@
-﻿/* favoriteSidebar.css */
+﻿
+
+/* prevents bottom content from being obscured*/
+#favorite-sidebar {
+    padding-bottom: 80px; 
+}
 
 /* Remove the list item bullets */
 #favorite-sidebar ul {
@@ -47,4 +52,15 @@
     width: 20px;
     height: 20px;
     text-align: center;
+}
+
+/*Medium header*/
+#favorite-sidebar h5 {
+    text-align: center; /* Center the text inside the h5 element */
+    margin-bottom: 10px; /* Add margin below if needed */
+}
+/*Sidebar Header*/
+#favorite-sidebar h4 {
+    text-align: center; /* Center the text inside the h4 element */
+    margin-bottom: 10px; /* Add margin below if needed */
 }
