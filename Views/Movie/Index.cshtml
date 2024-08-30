@@ -16,15 +16,6 @@
             <div class="info">
                 <h1 class="title">@Model.Title</h1>
                 <p class="tagline">@Model.Tagline</p>
-                <p class="overview">@Model.Overview</p>
-                <ul class="details">
-                    <li><strong>Release Date:</strong> @Model.ReleaseDate</li>
-                    <li><strong>Genres:</strong> @string.Join(", ", Model.Genres.Select(g => g.Name))</li>
-                    <li><strong>Rating:</strong> @Model.VoteAverage / 10</li>
-                    <li><strong>Runtime:</strong> @Model.Runtime minutes</li>
-                    <li><strong>Production Companies:</strong> @string.Join(", ", Model.ProductionCompanies.Select(pc => pc.Name))</li>
-                    <li><strong>Favorites:</strong> @Model.FavoriteAmount users have favorited this movie</li>
-                </ul>
 
                 <!-- Favorite Button -->
                 @if (User.Identity.IsAuthenticated)
@@ -42,6 +33,20 @@
                 {
                     <a class="btn btn-primary" asp-action="Login" asp-controller="User">Log in to favorite</a>
                 }
+
+
+                <p class="overview">@Model.Overview</p>
+                <ul class="details">
+                    <li><strong>Favorites:</strong> @Model.FavoriteAmount users have favorited this movie</li>
+                    <li><strong>Release Date:</strong> @Model.ReleaseDate</li>
+                    <li><strong>Genres:</strong> @string.Join(", ", Model.Genres.Select(g => g.Name))</li>
+                    <li><strong>Rating:</strong> @Model.VoteAverage / 10</li>
+                    <li><strong>Runtime:</strong> @Model.Runtime minutes</li>
+                    <li><strong>Production Companies:</strong> @string.Join(", ", Model.ProductionCompanies.Select(pc => pc.Name))</li>
+
+                </ul>
+
+
             </div>
         </div>
     </div>

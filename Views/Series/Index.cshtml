@@ -16,20 +16,6 @@
             <div class="info">
                 <h1 class="title">@Model.Name</h1>
                 <p class="tagline">@Model.Tagline</p>
-                <p class="overview">@Model.Overview</p>
-                <ul class="details">
-                    <li><strong>First Air Date:</strong> @Model.FirstAirDate</li>
-                    <li><strong>Last Air Date:</strong> @Model.LastAirDate</li>
-                    <li><strong>Genres:</strong> @string.Join(", ", Model.Genres.Select(g => g.Name))</li>
-                    <li><strong>Number of Seasons:</strong> @Model.NumberOfSeasons</li>
-                    <li><strong>Number of Episodes:</strong> @Model.NumberOfEpisodes</li>
-                    <li><strong>In Production:</strong> @(Model.InProduction ? "Yes" : "No")</li>
-                    <li><strong>Created By:</strong> @string.Join(", ", Model.CreatedBy.Select(c => c.Name))</li>
-                    <li><strong>Networks:</strong> @string.Join(", ", Model.Networks.Select(n => n.Name))</li>
-                    <li><strong>Rating:</strong> @Model.VoteAverage / 10</li>
-                    <li><strong>Popularity:</strong> @Model.Popularity</li>
-                    <li><strong>Favorites:</strong> @Model.FavoriteAmount users have favorited this series</li>
-                </ul>
 
                 <!-- Favorite Button -->
                 @if (User.Identity.IsAuthenticated)
@@ -47,6 +33,23 @@
                 {
                     <a class="btn btn-primary" asp-action="Login" asp-controller="User">Log in to favorite</a>
                 }
+
+                <p class="overview">@Model.Overview</p>
+                <ul class="details">
+                    <li><strong>Favorites:</strong> @Model.FavoriteAmount users have favorited this series</li>
+                    <li><strong>First Air Date:</strong> @Model.FirstAirDate</li>
+                    <li><strong>Last Air Date:</strong> @Model.LastAirDate</li>
+                    <li><strong>Genres:</strong> @string.Join(", ", Model.Genres.Select(g => g.Name))</li>
+                    <li><strong>Number of Seasons:</strong> @Model.NumberOfSeasons</li>
+                    <li><strong>Number of Episodes:</strong> @Model.NumberOfEpisodes</li>
+                    <li><strong>In Production:</strong> @(Model.InProduction ? "Yes" : "No")</li>
+                    <li><strong>Created By:</strong> @string.Join(", ", Model.CreatedBy.Select(c => c.Name))</li>
+                    <li><strong>Networks:</strong> @string.Join(", ", Model.Networks.Select(n => n.Name))</li>
+                    <li><strong>Rating:</strong> @Model.VoteAverage / 10</li>
+                    <li><strong>Popularity:</strong> @Model.Popularity</li>
+                </ul>
+
+
             </div>
         </div>
     </div>

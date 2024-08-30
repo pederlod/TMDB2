@@ -49,10 +49,9 @@
     </ul>
 </div>
 
-
 <script type="text/javascript">
-    $(document).ready(function () { //ensures that the code inside it runs only after the entire DOM (Document Object Model) has been loaded before a user can interact with them.
-        function bindRemoveFavoriteEvents() {   //The off('click') method removes any previously attached click event handlers from elements with the remove-favorite class. Prevents the problem of multiple event bindings, which can occur if the event is attached multiple times (e.g., after a sidebar refresh).
+    $(document).ready(function () {
+        function bindRemoveFavoriteEvents() {
             $('.remove-favorite').off('click').on('click', function () {
                 var button = $(this);
                 button.prop('disabled', true); // Disable the button to prevent multiple clicks
@@ -81,6 +80,15 @@
                             $('#favorite-sidebar').load('@Url.Action("UpdateFavoriteSidebar", "Favorite")', function () {
                                 bindRemoveFavoriteEvents(); // Re-bind events after updating the sidebar
                             });
+
+                            // Check if on the Favorite Index page, and update the corresponding list
+                            if (window.location.pathname === '@Url.Action("Index", "Favorite")') {
+                                if (type === "movie") {
+                                    $("#movie-" + id).remove(); // Remove the movie from the list
+                                } else if (type === "series") {
+                                    $("#series-" + id).remove(); // Remove the series from the list
+                                }
+                            }
                         } else {
                             alert('Failed to remove from favorites');
                         }
@@ -98,4 +106,6 @@
         bindRemoveFavoriteEvents(); // Bind the click events on page load
     });
 </script>
+
+
 

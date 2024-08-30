@@ -37,3 +37,8 @@ body {
     font-family: 'Comic Sans MS'; /* Default font here */
     margin-top: 5px; /* Adjust in case of navbar bamboozle */
 }
+
+.remove-favorite {
+    background-color: #8d97a1;
+    border: none;
+}
