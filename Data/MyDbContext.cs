@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using TMDB2.Models;
-
+// this class is for managing the comunication with my local database.
 namespace TMDB2.Data
 {
     public class MyDbContext : DbContext

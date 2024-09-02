@@ -45,7 +45,7 @@
         color: lightgray;
     }
 
-        /*checkbox  TODO: make the checked grey and not blue*/
+        /*checkbox  TODO: make the checked grey and not blue... this is harder than expected*/
     .search-form input[type="checkbox"] {
         margin-right: 10px;
         width: 20px;
