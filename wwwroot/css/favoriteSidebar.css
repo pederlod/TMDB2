@@ -1,0 +1,87 @@
+﻿/* From Darkest to ligthest cheatsheet:
+
+#1a1c1f
+#272c30
+#41484f
+#5c656e
+#8d97a1
+#d8e0e8
+
+*/
+
+/* prevents bottom content from being obscured*/
+#favorite-sidebar {
+    padding-bottom: 80px; 
+}
+
+/* Remove the list item bullets */
+#favorite-sidebar ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+/* Center the content inside list items */
+#favorite-sidebar li {
+    text-align: center;
+    margin-bottom: 20px; /* Space between items */
+    position: relative; /* Allows absolute positioning of the button */
+}
+
+/* Style the poster images */
+.poster-thumbnail {
+    border-radius: 10px; /* Rounded corners */
+    width: 92px; /* Ensure consistent width */
+    height: auto; /* Maintain aspect ratio */
+    display: block;
+    margin: 0 auto 10px auto; /* Center the image and add margin below */
+}
+
+/* Style the title links */
+#favorite-sidebar a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    margin-bottom: 10px; /* Space between title and button */
+    font-size: 15px;
+}
+
+    /* Add hover effect for links */
+    #favorite-sidebar a:hover {
+        text-decoration: underline;
+    }
+
+/* Style the remove button */
+#favorite-sidebar .remove-favorite {
+    position: absolute;
+    top: 105px;
+    right: 12px; /* Adjust to move the button to the right of the image */
+    padding: 1px 0px;
+    border-radius: 50%;
+    font-size: 20px; 
+    background-color: #8d97a1;
+    line-height: 10px;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    border: none;
+}
+
+    /* Change color and add shadow on hover (remove button) */
+#favorite-sidebar .remove-favorite:hover {
+    background-color: #d8e0e8;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow effect */
+}
+
+/*Medium header*/
+#favorite-sidebar h5 {
+    margin-top: 30px;
+    text-align: center; /* Center the text inside the h5 element */
+    margin-bottom: 10px; /* Add margin below if needed */
+    font-size: 25px;
+}
+/*Sidebar Header*/
+#favorite-sidebar h4 {
+    text-align: center; /* Center the text inside the h4 element */
+    margin-bottom: 10px; /* Add margin below if needed */
+    font-size:30px;
+}

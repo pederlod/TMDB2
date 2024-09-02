@@ -16,20 +16,6 @@
             <div class="info">
                 <h1 class="title">@Model.Name</h1>
                 <p class="tagline">@Model.Tagline</p>
-                <p class="overview">@Model.Overview</p>
-                <ul class="details">
-                    <li><strong>First Air Date:</strong> @Model.FirstAirDate</li>
-                    <li><strong>Last Air Date:</strong> @Model.LastAirDate</li>
-                    <li><strong>Genres:</strong> @string.Join(", ", Model.Genres.Select(g => g.Name))</li>
-                    <li><strong>Number of Seasons:</strong> @Model.NumberOfSeasons</li>
-                    <li><strong>Number of Episodes:</strong> @Model.NumberOfEpisodes</li>
-                    <li><strong>In Production:</strong> @(Model.InProduction ? "Yes" : "No")</li>
-                    <li><strong>Created By:</strong> @string.Join(", ", Model.CreatedBy.Select(c => c.Name))</li>
-                    <li><strong>Networks:</strong> @string.Join(", ", Model.Networks.Select(n => n.Name))</li>
-                    <li><strong>Rating:</strong> @Model.VoteAverage / 10</li>
-                    <li><strong>Popularity:</strong> @Model.Popularity</li>
-                    <li><strong>Favorites:</strong> @Model.FavoriteAmount users have favorited this series</li>
-                </ul>
 
                 <!-- Favorite Button -->
                 @if (User.Identity.IsAuthenticated)
@@ -47,17 +33,80 @@
                 {
                     <a class="btn btn-primary" asp-action="Login" asp-controller="User">Log in to favorite</a>
                 }
+
+                <p class="overview">@Model.Overview</p>
+                <ul class="details">
+                    <li><strong>Favorites:</strong> @Model.FavoriteAmount users have favorited this series</li>
+                    <li><strong>First Air Date:</strong> @Model.FirstAirDate</li>
+                    <li><strong>Last Air Date:</strong> @Model.LastAirDate</li>
+                    <li><strong>Genres:</strong> @string.Join(", ", Model.Genres.Select(g => g.Name))</li>
+                    <li><strong>Number of Seasons:</strong> @Model.NumberOfSeasons</li>
+                    <li><strong>Number of Episodes:</strong> @Model.NumberOfEpisodes</li>
+                    <li><strong>In Production:</strong> @(Model.InProduction ? "Yes" : "No")</li>
+                    <li><strong>Created By:</strong> @string.Join(", ", Model.CreatedBy.Select(c => c.Name))</li>
+                    <li><strong>Networks:</strong> @string.Join(", ", Model.Networks.Select(n => n.Name))</li>
+                    <li><strong>Rating:</strong> @Model.VoteAverage / 10</li>
+                    <li><strong>Popularity:</strong> @Model.Popularity</li>
+                </ul>
+
+
             </div>
         </div>
     </div>
 
     <script type="text/javascript">
         $(document).ready(function () {
+            function refreshSidebar() {
+                console.log("Refreshing Sidebar...");
+                $('#favorite-sidebar').load('/Favorite/UpdateFavoriteSidebar', function () {
+                    console.log("Sidebar refreshed.");
+                    // Unbind any existing event handlers to prevent double binding
+                    $('.remove-favorite').off('click').on('click', function () {
+                        console.log("Remove button clicked.");
+                        var id = $(this).data('id');
+                        var type = $(this).data('type');
+                        var data = {};
+
+                        if (type === "movie") {
+                            data.idmovies = id;
+                        } else if (type === "series") {
+                            data.idseries = id;
+                        }
+
+                        var url = (type === "movie")
+                            ? '@Url.Action("RemoveFavoriteMovie", "Favorite")'
+                            : '@Url.Action("RemoveFavoriteSeries", "Favorite")';
+
+                        console.log("Sending AJAX request to remove favorite.");
+                        $.ajax({
+                            type: "POST",
+                            url: url,
+                            data: data,
+                            success: function (response) {
+                                if (response.success) {
+                                    console.log("Successfully removed. Refreshing sidebar...");
+                                    refreshSidebar(); // Recursively refresh the sidebar
+                                } else {
+                                    alert('Failed to remove from favorites.');
+                                }
+                            },
+                            error: function () {
+                                alert('An error occurred while trying to remove from favorites');
+                            }
+                        });
+                    });
+                });
+            }
+
             $('#favoriteButton').click(function () {
+                console.log("Favorite button clicked.");
                 var isFavorite = $(this).data('favorite') === "true";
                 var seriesId = $(this).data('series-id');
                 var seriesTitle = $(this).data('series-title');
                 var url = isFavorite ? '@Url.Action("RemoveFavoriteSeries", "Favorite")' : '@Url.Action("AddFavoriteSeries", "Favorite")';
+
+                // Prevent multiple clicks (disable the button temporarily)
+                $('#favoriteButton').prop('disabled', true);
 
                 $.ajax({
                     type: "POST",
@@ -68,17 +117,24 @@
                         if (isFavorite) {
                             $('#favoriteButton').removeClass('btn-danger').addClass('btn-primary');
                             $('#favoriteButton').text('Add to Favorites');
-                            $('#favoriteButton').data('favorite', 'false'); // Update data-favorite attribute
+                            $('#favoriteButton').data('favorite', 'false');
                         } else {
                             $('#favoriteButton').removeClass('btn-primary').addClass('btn-danger');
                             $('#favoriteButton').text('Remove from Favorites');
-                            $('#favoriteButton').data('favorite', 'true'); // Update data-favorite attribute
+                            $('#favoriteButton').data('favorite', 'true');
                         }
-                        // I want to update the Favorite sidebar here, but for some reason the button functionality breaks when removing a favorite.
-                        
+                        console.log("Sidebar will now refresh after favorite toggle.");
+                        refreshSidebar(); // Refresh the sidebar after toggling favorite status
+                    },
+                    complete: function () {
+                        // Re-enable the button after the operation is complete
+                        $('#favoriteButton').prop('disabled', false);
                     }
                 });
             });
+
+            // Ensure sidebar is refreshed after document load
+            refreshSidebar();
         });
     </script>
 </body>

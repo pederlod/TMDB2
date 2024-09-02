@@ -22,11 +22,25 @@
     */
 }
 
+/*Maybe i should consider putting these in the same class hehe*/
 .movie-details {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
+
+.series-details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.person-details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 
 .poster {
     

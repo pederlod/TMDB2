@@ -1,33 +1,74 @@
 ﻿@model TMDB2.Models.FavoriteList
 
 <div class="container">
-    <h2>Your Favorites</h2>
+    <h2>Your Favorites:</h2>
 
     <h3>Movies</h3>
-    <ul>
+    <ul id="movie-list">
         @foreach (var movie in Model.Movies)
         {
-            <li>
+            <li id="movie-@movie.Id">
                 @movie.Title
-                <form asp-action="RemoveFavoriteMovie" method="post" style="display:inline;">
-                    <input type="hidden" name="idmovies" value="@movie.Id" />
-                    <button type="submit" class="btn btn-danger btn-sm">Remove</button>
-                </form>
+                <button class="btn btn-danger btn-sm remove-favorite-main" data-id="@movie.Id" data-type="movie">Remove</button>
             </li>
         }
     </ul>
 
     <h3>Series</h3>
-    <ul>
+    <ul id="series-list">
         @foreach (var series in Model.Series)
         {
-            <li>
+            <li id="series-@series.Id">
                 @series.Name
-                <form asp-action="RemoveFavoriteSeries" method="post" style="display:inline;">
-                    <input type="hidden" name="idseries" value="@series.Id" />
-                    <button type="submit" class="btn btn-danger btn-sm">Remove</button>
-                </form>
+                <button class="btn btn-danger btn-sm remove-favorite-main" data-id="@series.Id" data-type="series">Remove</button>
             </li>
         }
     </ul>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.remove-favorite-main').click(function (event) {
+            event.preventDefault(); // Prevent the form from submitting normally
+
+            var id = $(this).data('id');
+            var type = $(this).data('type');
+            var data = {};
+
+            if (type === "movie") {
+                data.idmovies = id;
+            } else if (type === "series") {
+                data.idseries = id;
+            }
+
+            var url = (type === "movie")
+                ? '@Url.Action("RemoveFavoriteMovie", "Favorite")'
+                : '@Url.Action("RemoveFavoriteSeries", "Favorite")';
+
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: data, // Send the appropriate data based on the type
+                success: function (response) {
+                    if (response.success) {
+                        // Remove the list item in the main view
+                        if (type === "movie") {
+                            $("#movie-" + id).remove();
+                        } else if (type === "series") {
+                            $("#series-" + id).remove();
+                        }
+
+                        // Refresh the sidebar content
+                        $('#favorite-sidebar').load('@Url.Action("UpdateFavoriteSidebar", "Favorite")');
+                    } else {
+                        alert('Failed to remove from favorites.');
+                    }
+                },
+                error: function () {
+                    alert('An error occurred while trying to remove from favorites');
+                }
+            });
+        });
+    });
+</script>

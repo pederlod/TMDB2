@@ -1,5 +1,8 @@
 ﻿@model TMDB2.Models.FavoriteList
 
+<!-- Link the custom stylesheet -->
+<link rel="stylesheet" href="~/css/favoriteSidebar.css" />
+
 <div id="favorite-sidebar">
     <h4>Your Favorites</h4>
 
@@ -9,7 +12,14 @@
         {
             <li>
                 <a href="@Url.Action("Index", "Movie", new { movieId = movie.Id })">
-                    <img src="https://image.tmdb.org/t/p/w92/@movie.PosterPath" alt="@movie.Title" class="poster-thumbnail" />
+                    @if (!string.IsNullOrEmpty(movie.PosterPath))
+                    {
+                        <img src="https://image.tmdb.org/t/p/w92/@movie.PosterPath" alt="@movie.Title" class="poster-thumbnail" />
+                    }
+                    else
+                    {
+                        <img src="https://via.placeholder.com/92x138?text=No+Image" alt="No Image" class="poster-thumbnail" />
+                    }
                     @movie.Title
                 </a>
                 <button class="btn btn-danger btn-sm remove-favorite" data-id="@movie.Id" data-type="movie">X</button>
@@ -23,7 +33,14 @@
         {
             <li>
                 <a href="@Url.Action("Index", "Series", new { seriesId = series.Id })">
-                    <img src="https://image.tmdb.org/t/p/w92/@series.PosterPath" alt="@series.Name" class="poster-thumbnail" />
+                    @if (!string.IsNullOrEmpty(series.PosterPath))
+                    {
+                        <img src="https://image.tmdb.org/t/p/w92/@series.PosterPath" alt="@series.Name" class="poster-thumbnail" />
+                    }
+                    else
+                    {
+                        <img src="https://via.placeholder.com/92x138?text=No+Image" alt="No Image" class="poster-thumbnail" />
+                    }
                     @series.Name
                 </a>
                 <button class="btn btn-danger btn-sm remove-favorite" data-id="@series.Id" data-type="series">X</button>
@@ -32,41 +49,63 @@
     </ul>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
-        $('.remove-favorite').click(function () {
-            var id = $(this).data('id');
-            var type = $(this).data('type');
-            var data = {};
+        function bindRemoveFavoriteEvents() {
+            $('.remove-favorite').off('click').on('click', function () {
+                var button = $(this);
+                button.prop('disabled', true); // Disable the button to prevent multiple clicks
 
-            if (type === "movie") {
-                data.idmovies = id;
-            } else if (type === "series") {
-                data.idseries = id;
-            }
+                var id = button.data('id');
+                var type = button.data('type');
+                var data = {};
 
-            var url = (type === "movie")
-                ? '@Url.Action("RemoveFavoriteMovie", "Favorite")'
-                : '@Url.Action("RemoveFavoriteSeries", "Favorite")';
-
-            $.ajax({
-                type: "POST",
-                url: url,
-                data: data, // Send the appropriate data based on the type
-                success: function (response) {
-                    if (response.success) {
-                        // Reload the sidebar by triggering the view component action
-                        $('#favorite-sidebar').load('/Favorite/UpdateFavoriteSidebar');
-                    } else {
-                        alert('Failed to update sidebar.');
-                    }
-                },
-                error: function () {
-                    alert('An error occurred while trying to remove from favorites');
+                if (type === "movie") {
+                    data.idmovies = id;
+                } else if (type === "series") {
+                    data.idseries = id;
                 }
+
+                var url = (type === "movie")
+                    ? '@Url.Action("RemoveFavoriteMovie", "Favorite")'
+                    : '@Url.Action("RemoveFavoriteSeries", "Favorite")';
+
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: data, // Send the appropriate data based on the type
+                    success: function (response) {
+                        if (response.success) {
+                            // Reload the sidebar content
+                            $('#favorite-sidebar').load('@Url.Action("UpdateFavoriteSidebar", "Favorite")', function () {
+                                bindRemoveFavoriteEvents(); // Re-bind events after updating the sidebar
+                            });
+
+                            // Check if on the Favorite Index page, and update the corresponding list
+                            if (window.location.pathname === '@Url.Action("Index", "Favorite")') {
+                                if (type === "movie") {
+                                    $("#movie-" + id).remove(); // Remove the movie from the list
+                                } else if (type === "series") {
+                                    $("#series-" + id).remove(); // Remove the series from the list
+                                }
+                            }
+                        } else {
+                            alert('Failed to remove from favorites');
+                        }
+                    },
+                    error: function () {
+                        alert('An error occurred while trying to remove from favorites');
+                    },
+                    complete: function () {
+                        button.prop('disabled', false); // Re-enable the button after the operation is complete
+                    }
+                });
             });
-        });
+        }
+
+        bindRemoveFavoriteEvents(); // Bind the click events on page load
     });
 </script>
+
+
 

@@ -4,8 +4,10 @@ using TMDB2.Models;
 using System.Linq;
 using System;
 using Microsoft.EntityFrameworkCore;
-using TMDB2.ViewComponents.Components;
-
+using static Mysqlx.Error.Types;
+//using TMDB2.ViewComponents.Components;
+//Error (active)	CS0234	The type or namespace name 'ViewComponents' does not exist in the namespace 'TMDB2' (are you missing an assembly reference?)
+//What???
 public class FavoriteController : Controller
 {
     private readonly MyDbContext _context;
@@ -91,7 +93,7 @@ public class FavoriteController : Controller
         _context.FavoriteMovies.Add(favoriteMovie);
         _context.SaveChanges();
 
-        UpdateFavoriteSidebar();
+       
 
         return Json(new { success = true });
     }
@@ -119,7 +121,7 @@ public class FavoriteController : Controller
         _context.FavoriteSeries.Add(new FavoriteSeries { Iduser = userId, Idseries = idseries });
         _context.SaveChanges();
 
-        UpdateFavoriteSidebar();
+        
 
         return Json(new { success = true });
     }
@@ -136,12 +138,16 @@ public class FavoriteController : Controller
         var favoriteMovie = _context.FavoriteMovies
             .FirstOrDefault(fm => fm.Iduser == userId && fm.Idmovies == idmovies);
 
+        Console.WriteLine($"just some text to check if two removals are called asynchronously");
+
         if (favoriteMovie != null)
         {
+            Console.WriteLine($"FavoriteMovie is not null");
+
             _context.FavoriteMovies.Remove(favoriteMovie);
             _context.SaveChanges();
 
-            UpdateFavoriteSidebar();
+            Console.WriteLine($"Succesfully removed favorite movie. UserId: {userId}, MovieId: {idmovies}");
 
             return Json(new { success = true });
         
@@ -168,7 +174,7 @@ public class FavoriteController : Controller
             _context.FavoriteSeries.Remove(favoriteSeries);
             _context.SaveChanges();
 
-            UpdateFavoriteSidebar();
+           
 
             return Json(new { success = true });
         }
