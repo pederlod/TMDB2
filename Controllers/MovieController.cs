@@ -1,11 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Threading.Tasks;
-using TMDB2.Data;
 using TMDB2.Models;
+using TMDB2.Data;
+
 
 namespace TMDB2.Controllers
 {
@@ -40,56 +37,75 @@ namespace TMDB2.Controllers
 
         //TODO. Implement autofill or dropdown? current filter requires very precise precise input.
 
-    public async Task<IActionResult> Search(string query, string genre, string actor, int? year)
-    {
-        var apiKey = "bf1f911dcc8d683db6962773bd88ca51";
-        string url;
-
-        if (!string.IsNullOrEmpty(query))
+        public async Task<IActionResult> Search(string query, string genre, string actor, int? year, int page = 1)
         {
-            url = $"https://api.themoviedb.org/3/search/movie?query={query}&include_adult=false&language=en-US&page=1&api_key={apiKey}";
-        }
-        else
-        {
-            var genreId = await GetGenreId(genre);
-            var actorId = await GetActorId(actor);
+            var apiKey = "bf1f911dcc8d683db6962773bd88ca51";
+            string url;
 
-            url = $"https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&api_key={apiKey}";
-
-            if (genreId != null)
+            if (!string.IsNullOrEmpty(query))
             {
-                url += $"&with_genres={genreId}";
+                url = $"https://api.themoviedb.org/3/search/movie?query={query}&include_adult=false&language=en-US&page={page}&api_key={apiKey}";
             }
-
-            if (actorId != null)
+            else
             {
-                url += $"&with_cast={actorId}";
-            }
+                var genreId = await GetGenreId(genre);
+                var actorId = await GetActorId(actor);
 
-            if (year != null)
+                url = $"https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page={page}&sort_by=popularity.desc&api_key={apiKey}";
+
+                if (genreId != null)
+                {
+                    url += $"&with_genres={genreId}";
+                }
+
+                if (actorId != null)
+                {
+                    url += $"&with_cast={actorId}";
+                }
+
+                if (year != null)
+                {
+                    url += $"&primary_release_year={year}";
+                }
+            }
+            try
             {
-                url += $"&primary_release_year={year}";
+                var response = await _httpClient.GetStringAsync(url);
+
+                _logger.LogInformation("API Response: " + response);
+
+                var apiResult = JsonConvert.DeserializeObject<MovieApiResponse>(response);
+
+                _logger.LogInformation($"Deserialized TotalPages: {apiResult.TotalPages}");
+
+                var model = new MovieList
+                {
+                    Movies = apiResult.Results,
+                    TotalCount = apiResult.TotalResults,
+                    CurrentPage = apiResult.Page ?? 1,
+                    TotalPages = apiResult.TotalPages ?? 1
+                };
+
+
+
+                ViewBag.Query = query;
+                ViewBag.Genre = genre;
+                ViewBag.Actor = actor;
+                ViewBag.Year = year;
+
+
+                return View(model);
+            }
+            catch (HttpRequestException ex)
+            {
+                _logger.LogError($"Request to {url} failed with status code {ex.StatusCode}: {ex.Message}");
+                return StatusCode((int)ex.StatusCode, "Error retrieving Movie search data.");
             }
         }
-        try
-        {
-            var response = await _httpClient.GetStringAsync(url);
-            var apiResult = JsonConvert.DeserializeObject<MovieApiResponse>(response);
-
-            var model = new MovieList { Movies = apiResult.Results, TotalCount = apiResult.TotalResults };
-            return View(model);
-        }
-        catch (HttpRequestException ex)
-        {
-            _logger.LogError($"Request to {url} failed with status code {ex.StatusCode}: {ex.Message}");
-            return StatusCode((int)ex.StatusCode, "Error retrieving Movie search data.");
-        }
 
 
-    }
-
-    // http request to aquire the ID of genre and actor searched for. Should be improved to not be as strict
-    private async Task<int?> GetGenreId(string genre)
+        // http request to aquire the ID of genre and actor searched for. Should be improved to not be as strict
+        private async Task<int?> GetGenreId(string genre)
     {
         if (string.IsNullOrEmpty(genre)) return null;
         var apiKey = "bf1f911dcc8d683db6962773bd88ca51";

@@ -1,11 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Net.Http;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 using TMDB2.Models;
-using Microsoft.EntityFrameworkCore;
 using TMDB2.Data;
-using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
 
 
 public class SeriesController : Controller
@@ -20,19 +16,23 @@ public class SeriesController : Controller
         _context = context;
     }
     // Series search result display view
-    public async Task<IActionResult> Search(string query)
+    public async Task<IActionResult> Search(string query, int page = 1)
     {
         var apiKey = "bf1f911dcc8d683db6962773bd88ca51";
-        var url = $"https://api.themoviedb.org/3/search/tv?query={query}&include_adult=false&language=en-US&page=1&api_key={apiKey}";
-
+        var url = $"https://api.themoviedb.org/3/search/tv?query={query}&include_adult=false&language=en-US&page={page}&api_key={apiKey}";
 
         try
         {
-
             var response = await _httpClient.GetStringAsync(url);
             var apiResult = JsonConvert.DeserializeObject<SeriesApiResponse>(response);
 
-            var model = new SeriesList { Series = apiResult.Results, TotalCount = apiResult.TotalResults };
+            var model = new SeriesList
+            {
+                Series = apiResult.Results,
+                TotalCount = apiResult.TotalResults,
+                CurrentPage = apiResult.Page ?? 1,
+                TotalPages = apiResult.TotalPages ?? 1
+            };
             return View(model);
         }
         catch (HttpRequestException ex)
@@ -40,7 +40,6 @@ public class SeriesController : Controller
             _logger.LogError($"Request to {url} failed with status code {ex.StatusCode}: {ex.Message}");
             return StatusCode((int)ex.StatusCode, "Error retrieving series search data.");
         }
-
     }
 
     // Single Series view. just copied from movie atm
