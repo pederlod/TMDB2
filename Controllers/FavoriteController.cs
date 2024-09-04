@@ -138,11 +138,10 @@ public class FavoriteController : Controller
         var favoriteMovie = _context.FavoriteMovies
             .FirstOrDefault(fm => fm.Iduser == userId && fm.Idmovies == idmovies);
 
-        Console.WriteLine($"just some text to check if two removals are called asynchronously");
 
         if (favoriteMovie != null)
         {
-            Console.WriteLine($"FavoriteMovie is not null");
+            
 
             _context.FavoriteMovies.Remove(favoriteMovie);
             _context.SaveChanges();
@@ -153,7 +152,8 @@ public class FavoriteController : Controller
         
             
         }
-        Console.WriteLine("Favorite removal failed......");
+		Console.WriteLine($"FavoriteMovie is null");
+		Console.WriteLine("Favorite removal failed......");
         Console.WriteLine($"Favorite movie not found. UserId: {userId}, MovieId: {idmovies}");
         Console.WriteLine("Is Favorite movie null? " + favoriteMovie != null);
         Console.WriteLine("userId: " +  userId);
@@ -201,6 +201,7 @@ public class FavoriteController : Controller
     }
 
     //updates sidebar when a movie or series is favorited or unfavorited
+    //TODO: should be scrapped, found a better way
     public IActionResult UpdateFavoriteSidebar()
     {
         Console.WriteLine("UpdateFavoriteSidebar is called!");

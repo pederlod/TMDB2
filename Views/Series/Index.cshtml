@@ -48,14 +48,79 @@
                     <li><strong>Rating:</strong> @Model.VoteAverage / 10</li>
                     <li><strong>Popularity:</strong> @Model.Popularity</li>
                 </ul>
-
-
             </div>
         </div>
     </div>
 
     <script type="text/javascript">
         $(document).ready(function () {
+
+            // Log the data-favorite attribute value before processing
+            console.log("Initial data-favorite attribute value: " + $('#favoriteButton').data('favorite'));
+
+            // Initialize the button state correctly when the page loads
+            var isFavorite = $('#favoriteButton').data('favorite') === 'true' || $('#favoriteButton').data('favorite') === true;
+
+            // Log for debugging
+            console.log("Index believes this is a favorite? " + isFavorite);
+
+            // Update button to correct state
+            function updateButtonState(isFavorite) {
+                var button = $('#favoriteButton');
+                if (isFavorite) {
+                    button.removeClass('btn-primary').addClass('btn-danger');
+                    button.text('Remove from Favorites');
+                    button.data('favorite', 'true');
+                } else {
+                    button.removeClass('btn-danger').addClass('btn-primary');
+                    button.text('Add to Favorites');
+                    button.data('favorite', 'false');
+                }
+            }
+
+            // Listen for the custom event 'favoriteRemoved'
+            $(document).on('favoriteRemoved', function (event, data) {
+                var currentSeriesId = $('#favoriteButton').data('series-id');
+
+                // Check if the removed favorite is the current series
+                if (data.type === 'series' && data.id == currentSeriesId) {
+                    // Update the button to reflect that the series is no longer a favorite
+                    updateButtonState(false);
+                }
+            });
+
+            updateButtonState(isFavorite);
+
+            $('#favoriteButton').click(function () {
+                console.log("Favorite button clicked.");
+                var isFavorite = $(this).data('favorite') === "true";
+                var seriesId = $(this).data('series-id');
+                var seriesTitle = $(this).data('series-title');
+                var url = isFavorite ? '@Url.Action("RemoveFavoriteSeries", "Favorite")' : '@Url.Action("AddFavoriteSeries", "Favorite")';
+
+                // Prevent multiple clicks (disable the button temporarily)
+                $('#favoriteButton').prop('disabled', true);
+
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: { idseries: seriesId, title: seriesTitle },
+                    success: function (response) {
+                        // Toggle the button state
+                        isFavorite = !isFavorite;
+                        updateButtonState(isFavorite);
+
+                        console.log("Sidebar will now refresh after favorite toggle.");
+                        refreshSidebar(); // Refresh the sidebar after toggling favorite status
+                    },
+                    complete: function () {
+                        // Re-enable the button after the operation is complete
+                        $('#favoriteButton').prop('disabled', false);
+                    }
+                });
+            });
+
+            // Refresh sidebar to reflect changes in favorites
             function refreshSidebar() {
                 console.log("Refreshing Sidebar...");
                 $('#favorite-sidebar').load('/Favorite/UpdateFavoriteSidebar', function () {
@@ -98,44 +163,10 @@
                 });
             }
 
-            $('#favoriteButton').click(function () {
-                console.log("Favorite button clicked.");
-                var isFavorite = $(this).data('favorite') === "true";
-                var seriesId = $(this).data('series-id');
-                var seriesTitle = $(this).data('series-title');
-                var url = isFavorite ? '@Url.Action("RemoveFavoriteSeries", "Favorite")' : '@Url.Action("AddFavoriteSeries", "Favorite")';
-
-                // Prevent multiple clicks (disable the button temporarily)
-                $('#favoriteButton').prop('disabled', true);
-
-                $.ajax({
-                    type: "POST",
-                    url: url,
-                    data: { idseries: seriesId, title: seriesTitle },
-                    success: function (response) {
-                        // Toggle the button text, class, and data attribute
-                        if (isFavorite) {
-                            $('#favoriteButton').removeClass('btn-danger').addClass('btn-primary');
-                            $('#favoriteButton').text('Add to Favorites');
-                            $('#favoriteButton').data('favorite', 'false');
-                        } else {
-                            $('#favoriteButton').removeClass('btn-primary').addClass('btn-danger');
-                            $('#favoriteButton').text('Remove from Favorites');
-                            $('#favoriteButton').data('favorite', 'true');
-                        }
-                        console.log("Sidebar will now refresh after favorite toggle.");
-                        refreshSidebar(); // Refresh the sidebar after toggling favorite status
-                    },
-                    complete: function () {
-                        // Re-enable the button after the operation is complete
-                        $('#favoriteButton').prop('disabled', false);
-                    }
-                });
-            });
-
             // Ensure sidebar is refreshed after document load
             refreshSidebar();
         });
     </script>
+
 </body>
 </html>
