@@ -86,3 +86,42 @@
         .details li strong {
             color: #ffffff;
         }
+
+/*Favorite buttons on movie and series details*/
+/* Base button styling */
+#favoriteButton {
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition between colors */
+    font-size: 16px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Add to Favorites (primary) button styles */
+.btn-primary {
+    background-color: #41484f; /* Green background */
+    color: white; /* White text */
+}
+
+    .btn-primary:hover {
+        background-color: #272c30; /* Darker green on hover */
+    }
+
+/* Remove from Favorites (danger) button styles */
+.btn-danger {
+    background-color: #41484f; /* Red background */
+    color: white; /* White text */
+}
+
+    .btn-danger:hover {
+        background-color: #272c30; /* Darker red on hover */
+    }
+
+/* Disable button while processing */
+#favoriteButton:disabled {
+    background-color: #6c757d; /* Gray background for disabled state */
+    color: white; /* Lighter text for disabled button */
+    cursor: not-allowed;
+}

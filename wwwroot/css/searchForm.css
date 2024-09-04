@@ -53,12 +53,16 @@
         background: #d8e0e8;
         border-radius: 5px;
         border: 2px solid #555;
-        
+    }
 
-    }
-    .search-form input[type="checkbox"]:checked {
-        background-color: #d8e0e8;
-    }
+        .search-form input[type="checkbox"]:checked {
+            background-color: #d8e0e8;
+            border-color: #41484f;
+        }
+
+        .search-form input[type="checkbox"]:hover {
+            border-color: #272c30; /* Darker border on hover */
+        }
 
     /*Border around buttons*/
     .search-form .toggle-buttons {
@@ -88,26 +92,38 @@
             margin-bottom: 5px;
             box-shadow: 2px 0 5px rgba(0,0,0,0.5);
             margin-right: 5px;
+            transition: background-color 0.3s ease; /* Smooth transition */
         }
+
+            .search-form .toggle-buttons label:hover {
+                background-color: #41484f; /* Slightly darker than #5c656e */
+            }
+
         /*Movies, Series, People. When Selected*/
         .search-form .toggle-buttons input[type="radio"]:checked + label {
             background-color: #1a1c1f;
             color: white;
             border-color: white;
             box-shadow: 2px 0 5px rgba(0,0,0,0.5);
-
         }
-        /*Search button*/
+
+
+    /* Search button */
     .search-form button {
         padding: 10px;
         font-size: 16px;
-        background-color: #272c30;
+        background-color: #272c30; /* Original background */
         color: white;
         border: none;
         border-radius: 4px;
         cursor: pointer;
         box-shadow: 2px 0 5px rgba(0,0,0,0.5);
+        transition: background-color 0.3s ease; /* Smooth transition */
     }
+
+        .search-form button:hover {
+            background-color: #1a1c1f; /* Darker background on hover */
+        }
 
 #advancedSearchOptions {
     margin-top: 10px;
