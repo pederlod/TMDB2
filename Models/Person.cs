@@ -9,7 +9,7 @@ namespace TMDB2.Models
         public bool Adult { get; set; }
 
         [JsonProperty("also_known_as")]
-        public List<string> AlsoKnownAs { get; set; }
+        public List<string>? AlsoKnownAs { get; set; }
 
         [JsonProperty("biography")]
         public string Biography { get; set; }
