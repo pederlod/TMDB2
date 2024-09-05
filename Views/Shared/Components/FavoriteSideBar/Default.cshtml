@@ -81,6 +81,9 @@
                                 bindRemoveFavoriteEvents(); // Re-bind events after updating the sidebar
                             });
 
+                            // Trigger custom event to notify other parts of the page (like the movie details page)
+                            $(document).trigger('favoriteRemoved', { id: id, type: type });
+
                             // Check if on the Favorite Index page, and update the corresponding list
                             if (window.location.pathname === '@Url.Action("Index", "Favorite")') {
                                 if (type === "movie") {
@@ -106,6 +109,7 @@
         bindRemoveFavoriteEvents(); // Bind the click events on page load
     });
 </script>
+
 
 
 

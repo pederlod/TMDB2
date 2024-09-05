@@ -17,14 +17,19 @@ namespace TMDB2.Data
         public DbSet<FavoriteSeries> FavoriteSeries { get; set; }
 
         // This is for logging my SQL series. 
+
+        /*
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             // Enable logging of SQL queries
+
+            
             optionsBuilder
                 .UseLoggerFactory(LoggerFactory.Create(builder => { builder.AddConsole(); }))
                 .EnableSensitiveDataLogging(); // Optional: Shows parameters in SQL queries
+            
         }
-
+        */
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

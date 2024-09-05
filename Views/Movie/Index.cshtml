@@ -3,138 +3,175 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@Model.Title - Movie Details</title>
-    <link rel="stylesheet" href="~/css/details.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Include jQuery -->
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>@Model.Title - Movie Details</title>
+	<link rel="stylesheet" href="~/css/details.css">
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Include jQuery -->
 </head>
 <body>
-    <div class="container">
-        <div class="movie-details">
-            <img src="https://image.tmdb.org/t/p/w500/@Model.PosterPath" alt="@Model.Title" class="poster" onerror="this.onerror=null; this.src='https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3396.jpg';">
-            <div class="info">
-                <h1 class="title">@Model.Title</h1>
-                <p class="tagline">@Model.Tagline</p>
+	<div class="container">
+		<div class="movie-details">
+			<img src="https://image.tmdb.org/t/p/w500/@Model.PosterPath" alt="@Model.Title" class="poster" onerror="this.onerror=null; this.src='https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3396.jpg';">
+			<div class="info">
+				<h1 class="title">@Model.Title</h1>
+				<p class="tagline">@Model.Tagline</p>
 
-                <!-- Favorite Button -->
-                @if (User.Identity.IsAuthenticated)
-                {
-                    var isFavorite = ViewBag.IsFavorite as bool? ?? false;
+				<!-- Favorite Button -->
+				@if (User.Identity.IsAuthenticated)
+				{
+					var isFavorite = ViewBag.IsFavorite as bool? ?? false;
 
-                    <button id="favoriteButton" class="btn @(isFavorite ? "btn-danger" : "btn-primary")"
-                            data-favorite="@(isFavorite ? "true" : "false")"
-                            data-movie-id="@Model.Id"
-                            data-movie-title="@Model.Title">
-                        @(isFavorite ? "Remove from Favorites" : "Add to Favorites")
-                    </button>
-                }
-                else
-                {
-                    <a class="btn btn-primary" asp-action="Login" asp-controller="User">Log in to favorite</a>
-                }
-
-
-                <p class="overview">@Model.Overview</p>
-                <ul class="details">
-                    <li><strong>Favorites:</strong> @Model.FavoriteAmount users have favorited this movie</li>
-                    <li><strong>Release Date:</strong> @Model.ReleaseDate</li>
-                    <li><strong>Genres:</strong> @string.Join(", ", Model.Genres.Select(g => g.Name))</li>
-                    <li><strong>Rating:</strong> @Model.VoteAverage / 10</li>
-                    <li><strong>Runtime:</strong> @Model.Runtime minutes</li>
-                    <li><strong>Production Companies:</strong> @string.Join(", ", Model.ProductionCompanies.Select(pc => pc.Name))</li>
-
-                </ul>
+					<button id="favoriteButton"
+							class="btn @(isFavorite ? "btn-danger" : "btn-primary")"
+							data-favorite="@(isFavorite ? "true" : "false")"
+							data-movie-id="@Model.Id"
+							data-movie-title="@Model.Title">
+						@(isFavorite ? "Remove from Favorites" : "Add to Favorites")
+					</button>
+				}
+				else
+				{
+					<a class="btn btn-primary" asp-action="Login" asp-controller="User">Log in to favorite</a>
+				}
 
 
-            </div>
-        </div>
-    </div>
+				<p class="overview">@Model.Overview</p>
+				<ul class="details">
+					<li><strong>Favorites:</strong> @Model.FavoriteAmount users have favorited this movie</li>
+					<li><strong>Release Date:</strong> @Model.ReleaseDate</li>
+					<li><strong>Genres:</strong> @string.Join(", ", Model.Genres.Select(g => g.Name))</li>
+					<li><strong>Rating:</strong> @Model.VoteAverage / 10</li>
+					<li><strong>Runtime:</strong> @Model.Runtime minutes</li>
+					<li><strong>Production Companies:</strong> @string.Join(", ", Model.ProductionCompanies.Select(pc => pc.Name))</li>
 
-    <script type="text/javascript">
-        $(document).ready(function () {
-            function refreshSidebar() {
-                console.log("Refreshing Sidebar...");
-                $('#favorite-sidebar').load('/Favorite/UpdateFavoriteSidebar', function () {
-                    console.log("Sidebar refreshed.");
-                    // Unbind any existing event handlers to prevent double binding
-                    $('.remove-favorite').off('click').on('click', function () {
-                        console.log("Remove button clicked.");
-                        var id = $(this).data('id');
-                        var type = $(this).data('type');
-                        var data = {};
+				</ul>
 
-                        if (type === "movie") {
-                            data.idmovies = id;
-                        } else if (type === "series") {
-                            data.idseries = id;
-                        }
 
-                        var url = (type === "movie")
-                            ? '@Url.Action("RemoveFavoriteMovie", "Favorite")'
-                            : '@Url.Action("RemoveFavoriteSeries", "Favorite")';
+			</div>
+		</div>
+	</div>
 
-                        console.log("Sending AJAX request to remove favorite.");
-                        $.ajax({
-                            type: "POST",
-                            url: url,
-                            data: data,
-                            success: function (response) {
-                                if (response.success) {
-                                    console.log("Successfully removed. Refreshing sidebar...");
-                                    refreshSidebar(); // Recursively refresh the sidebar
-                                } else {
-                                    alert('Failed to remove from favorites.');
-                                }
-                            },
-                            error: function () {
-                                alert('An error occurred while trying to remove from favorites');
-                            }
-                        });
-                    });
-                });
-            }
+	<script type="text/javascript">
+		$(document).ready(function () {
 
-            $('#favoriteButton').click(function () {
-                console.log("Favorite button clicked.");
-                var isFavorite = $(this).data('favorite') === "true";
-                var movieId = $(this).data('movie-id');
-                var movieTitle = $(this).data('movie-title');
-                var url = isFavorite ? '@Url.Action("RemoveFavoriteMovie", "Favorite")' : '@Url.Action("AddFavoriteMovie", "Favorite")';
+			// Log the data-favorite attribute value before processing
+			console.log("Initial data-favorite attribute value: " + $('#favoriteButton').data('favorite'));
 
-                // Prevent multiple clicks (disable the button temporarily)
-                $('#favoriteButton').prop('disabled', true);
+			// Initialize the button state correctly when the page loads
+			var isFavorite = $('#favoriteButton').data('favorite') === 'true' || $('#favoriteButton').data('favorite') === true;
+			
+			// Does the logger even work?
+			console.log("Index believes this is a favorite? " + isFavorite);
 
-                $.ajax({
-                    type: "POST",
-                    url: url,
-                    data: { idmovies: movieId, title: movieTitle },
-                    success: function (response) {
-                        // Toggle the button text, class, and data attribute
-                        if (isFavorite) {
-                            $('#favoriteButton').removeClass('btn-danger').addClass('btn-primary');
-                            $('#favoriteButton').text('Add to Favorites');
-                            $('#favoriteButton').data('favorite', 'false');
-                        } else {
-                            $('#favoriteButton').removeClass('btn-primary').addClass('btn-danger');
-                            $('#favoriteButton').text('Remove from Favorites');
-                            $('#favoriteButton').data('favorite', 'true');
-                        }
-                        console.log("Sidebar will now refresh after favorite toggle.");
-                        refreshSidebar(); // Refresh the sidebar after toggling favorite status
-                    },
-                    complete: function () {
-                        // Re-enable the button after the operation is complete
-                        $('#favoriteButton').prop('disabled', false);
-                    }
-                });
-            });
+			// Update button to correct state
+			function updateButtonState(isFavorite) {
+				var button = $('#favoriteButton');
+				if (isFavorite) {
+					button.removeClass('btn-primary').addClass('btn-danger');
+					button.text('Remove from Favorites');
+					button.data('favorite', 'true');
+				} else {
+					button.removeClass('btn-danger').addClass('btn-primary');
+					button.text('Add to Favorites');
+					button.data('favorite', 'false');
+				}
+			}
 
-            // Ensure sidebar is refreshed after document load
-            refreshSidebar();
-        });
-    </script>
 
-    </script>
+			// Listen for the custom event 'favoriteRemoved'
+			$(document).on('favoriteRemoved', function (event, data) {
+				var currentMovieId = $('#favoriteButton').data('movie-id');
+
+				// Check if the removed favorite is the current movie
+				if (data.type === 'movie' && data.id == currentMovieId) {
+					// Update the button to reflect that the movie is no longer a favorite
+					updateButtonState(false);
+				}
+			});
+
+			updateButtonState(isFavorite);
+
+			$('#favoriteButton').click(function () {
+				console.log("Favorite button clicked.");
+				var isFavorite = $(this).data('favorite') === "true";
+				var movieId = $(this).data('movie-id');
+				var movieTitle = $(this).data('movie-title');
+				var url = isFavorite ? '@Url.Action("RemoveFavoriteMovie", "Favorite")' : '@Url.Action("AddFavoriteMovie", "Favorite")';
+
+				// Prevent multiple clicks (disable the button temporarily)
+				$('#favoriteButton').prop('disabled', true);
+
+				$.ajax({
+					type: "POST",
+					url: url,
+					data: { idmovies: movieId, title: movieTitle },
+					success: function (response) {
+						// Toggle the button state
+						isFavorite = !isFavorite;
+						updateButtonState(isFavorite);
+
+						console.log("Sidebar will now refresh after favorite toggle.");
+						refreshSidebar(); // Refresh the sidebar after toggling favorite status
+					},
+					complete: function () {
+						// Re-enable the button after the operation is complete
+						$('#favoriteButton').prop('disabled', false);
+					}
+				});
+			});
+
+
+
+
+			// Refresh sidebar to reflect changes in favorites
+			function refreshSidebar() {
+				console.log("Refreshing Sidebar...");
+				$('#favorite-sidebar').load('/Favorite/UpdateFavoriteSidebar', function () {
+					console.log("Sidebar refreshed.");
+					// Unbind any existing event handlers to prevent double binding
+					$('.remove-favorite').off('click').on('click', function () {
+						console.log("Remove button clicked.");
+						var id = $(this).data('id');
+						var type = $(this).data('type');
+						var data = {};
+
+						if (type === "movie") {
+							data.idmovies = id;
+						} else if (type === "series") {
+							data.idseries = id;
+						}
+
+						var url = (type === "movie")
+							? '@Url.Action("RemoveFavoriteMovie", "Favorite")'
+							: '@Url.Action("RemoveFavoriteSeries", "Favorite")';
+
+						console.log("Sending AJAX request to remove favorite.");
+						$.ajax({
+							type: "POST",
+							url: url,
+							data: data,
+							success: function (response) {
+								if (response.success) {
+									console.log("Successfully removed. Refreshing sidebar...");
+									refreshSidebar(); // Recursively refresh the sidebar
+								} else {
+									alert('Failed to remove from favorites.');
+								}
+							},
+							error: function () {
+								alert('An error occurred while trying to remove from favorites');
+							}
+						});
+					});
+				});
+			}
+
+
+			// Ensure sidebar is refreshed after document load
+			refreshSidebar();
+		});
+	</script>
+
 </body>
 </html>
