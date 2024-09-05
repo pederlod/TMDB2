@@ -42,7 +42,7 @@
                     <li><strong>Genres:</strong> @string.Join(", ", Model.Genres.Select(g => g.Name))</li>
                     <li><strong>Number of Seasons:</strong> @Model.NumberOfSeasons</li>
                     <li><strong>Number of Episodes:</strong> @Model.NumberOfEpisodes</li>
-                    <li><strong>In Production:</strong> @(Model.InProduction ? "Yes" : "No")</li>
+                    <li><strong>In Production:</strong> @(Model.InProduction.GetValueOrDefault() ? "Yes" : "No")</li>
                     <li><strong>Created By:</strong> @string.Join(", ", Model.CreatedBy.Select(c => c.Name))</li>
                     <li><strong>Networks:</strong> @string.Join(", ", Model.Networks.Select(n => n.Name))</li>
                     <li><strong>Rating:</strong> @Model.VoteAverage / 10</li>
