@@ -35,6 +35,46 @@
                     </p>
                 }
 
+                <!-- Display Popularity -->
+                @if (Model.Popularity > 0)
+                {
+                    <p><strong>Popularity:</strong> @Model.Popularity</p>
+                }
+
+                <!-- Display Place of Birth -->
+                @if (!string.IsNullOrEmpty(Model.PlaceOfBirth))
+                {
+                    <p><strong>Place of Birth:</strong> @Model.PlaceOfBirth</p>
+                }
+
+                <!-- Display Gender -->
+                @if (Model.Gender == 1)
+                {
+                    <p><strong>Gender:</strong> Female</p>
+                }
+                else if (Model.Gender == 2)
+                {
+                    <p><strong>Gender:</strong> Male</p>
+                }
+
+                <!-- Display Birthday (if available) -->
+                @if (!string.IsNullOrEmpty(Model.Birthday))
+                {
+                    <p><strong>Birthday:</strong> @Model.Birthday</p>
+                }
+
+                <!-- Display Deathday (if available) -->
+                @if (!string.IsNullOrEmpty(Model.Deathday))
+                {
+                    <p><strong>Deathday:</strong> @Model.Deathday</p>
+                }
+
+                <!-- Display Known For Department -->
+                @if (!string.IsNullOrEmpty(Model.KnownForDepartment))
+                {
+                    <p><strong>Known For:</strong> @Model.KnownForDepartment</p>
+                }
+
                 <!-- Display Biography -->
                 <p class="overview">@Model.Biography</p>
             </div>
@@ -42,3 +82,4 @@
     </div>
 </body>
 </html>
+
