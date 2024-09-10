@@ -3,7 +3,6 @@ using Newtonsoft.Json;
 using TMDB2.Models;
 using TMDB2.Data;
 
-
 namespace TMDB2.Controllers
 {
 	public class MovieController : Controller
@@ -11,21 +10,19 @@ namespace TMDB2.Controllers
 		private readonly HttpClient _httpClient;
 		private readonly ILogger<MovieController> _logger;
 		private readonly MyDbContext _context;
-
 		public MovieController(HttpClient httpClient, ILogger<MovieController> logger, MyDbContext context)
 		{
 			_httpClient = httpClient;
 			_logger = logger;
 			_context = context;
 		}
-
-		//TODO. Implement autofill or dropdown? current filter requires very precise precise input.
-
-		public async Task<IActionResult> Search(string query, string genre, string actor, int? year, int page = 1)
+        // Movies search result display view
+        public async Task<IActionResult> Search(string query, string genre, string actor, int? year, int page = 1)
 		{
 			var apiKey = "bf1f911dcc8d683db6962773bd88ca51";
 			string url;
 
+			//if query is empty, use filters.
 			if (!string.IsNullOrEmpty(query))
 			{
 				url = $"https://api.themoviedb.org/3/search/movie?query={query}&include_adult=false&language=en-US&page={page}&api_key={apiKey}";
@@ -51,7 +48,11 @@ namespace TMDB2.Controllers
 				{
 					url += $"&primary_release_year={year}";
 				}
-			}
+                else
+                {
+                    url = $"https://api.themoviedb.org/3/trending/movie/day?language=en-US&page={page}&api_key={apiKey}";
+                }
+            }
 			try
 			{
 				var response = await _httpClient.GetStringAsync(url);
@@ -89,30 +90,28 @@ namespace TMDB2.Controllers
 
 		// http request to aquire the ID of genre and actor searched for. Should be improved to not be as strict
 		private async Task<int?> GetGenreId(string genre)
-	{
-		if (string.IsNullOrEmpty(genre)) return null;
-		var apiKey = "bf1f911dcc8d683db6962773bd88ca51";
-		var url = $"https://api.themoviedb.org/3/genre/movie/list?api_key={apiKey}&language=en-US";
-		var response = await _httpClient.GetStringAsync(url);
-		var genres = JsonConvert.DeserializeObject<GenreResponse>(response);
+		{
+			if (string.IsNullOrEmpty(genre)) return null;
+			var apiKey = "bf1f911dcc8d683db6962773bd88ca51";
+			var url = $"https://api.themoviedb.org/3/genre/movie/list?api_key={apiKey}&language=en-US";
+			var response = await _httpClient.GetStringAsync(url);
+			var genres = JsonConvert.DeserializeObject<GenreResponse>(response);
 
-		var genreMatch = genres.Genres.FirstOrDefault(g => g.Name.Equals(genre, StringComparison.OrdinalIgnoreCase));
-		return genreMatch?.Id;
-	}
+			var genreMatch = genres.Genres.FirstOrDefault(g => g.Name.Equals(genre, StringComparison.OrdinalIgnoreCase));
+			return genreMatch?.Id;
+		}
 
-	private async Task<int?> GetActorId(string actor)
-	{
-		if (string.IsNullOrEmpty(actor)) return null;
-		var apiKey = "bf1f911dcc8d683db6962773bd88ca51";
-		var url = $"https://api.themoviedb.org/3/search/person?query={actor}&include_adult=false&language=en-US&page=1&api_key={apiKey}";
-		var response = await _httpClient.GetStringAsync(url);
-		var actorResult = JsonConvert.DeserializeObject<ActorApiResponse>(response);
+		private async Task<int?> GetActorId(string actor)
+		{
+			if (string.IsNullOrEmpty(actor)) return null;
+			var apiKey = "bf1f911dcc8d683db6962773bd88ca51";
+			var url = $"https://api.themoviedb.org/3/search/person?query={actor}&include_adult=false&language=en-US&page=1&api_key={apiKey}";
+			var response = await _httpClient.GetStringAsync(url);
+			var actorResult = JsonConvert.DeserializeObject<ActorApiResponse>(response);
 
-		var actorMatch = actorResult.Results.FirstOrDefault();
-		return actorMatch?.Id;
-	}
-
-
+			var actorMatch = actorResult.Results.FirstOrDefault();
+			return actorMatch?.Id;
+		}
 
         // Single movie view      
         public async Task<IActionResult> Index(int movieId)
@@ -165,21 +164,15 @@ namespace TMDB2.Controllers
             }
         }
 
-
-
         private int GetUserId()
-	{
-		var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
-		if (userIdClaim == null)
 		{
-			throw new Exception("User ID claim not found.");
+			var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+			if (userIdClaim == null)
+			{
+				throw new Exception("User ID claim not found.");
+			}
+			return int.Parse(userIdClaim.Value);
 		}
-		return int.Parse(userIdClaim.Value);
-	}
-
 	//favorite movie database communication
-
-
-
 	}
 }
