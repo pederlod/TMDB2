@@ -9,10 +9,138 @@
 
 */
 
+/* Global default styles */
+body {
+    font-size: 20px; /* Default font size */
+    line-height: 1.6; /* Improve readability */
+    color: #d8e0e8; /* Light color for contrast */
+    background-color: #5c656e; /* Background color */
+    font-family: Arial, sans-serif; /* Adjust the font for better readability */
+
+    font-size: 1rem; /* This allows scaling in browser setting for accessability */
+    background-color: #5c656e;
+    color: ghostwhite;
+}
+
+/* Headings default style */
+h1, h2, h3, h4, h5, h6 {
+    color: #d8e0e8; /* Light color for headings */
+    font-weight: bold; /* Make headings bold */
+    margin-bottom: 20px; /* Add spacing below headings */
+}
+
+/* Input fields default style */
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="number"],
+textarea {
+    background-color: #8d97a1; /* Slightly lighter background */
+    color: white; /* Text color */
+    border: 1px solid #8d97a1; /* Border color */
+    padding: 10px; /* Add padding inside input fields */
+    width: 100%; /* Full width inputs */
+    font-size: 22px; /* Default font size */
+    margin-bottom: 20px; /* Add space between input fields */
+}
+
+
+    /* Input fields default style when in focus */
+    input[type="text"]:focus,
+    input[type="password"]:focus,
+    input[type="email"]:focus,
+    input[type="number"]:focus,
+    textarea:focus {
+        background-color: #8d97a1; /* Gray background when focused */
+        color: white; /* White text */
+        border: 2px solid #007bff !important; /* Blue border when focused */
+        outline: none; /* Remove the default outline */
+        transition: border-color 0.3s ease; /* Smooth transition */
+    }
+
+    /*placeholder text*/
+    input[type="text"]::placeholder,
+    input[type="password"]::placeholder {
+        color: lightgray; /* Placeholder color */
+    }
+
+/* Button default style */
+button, .btn {
+    font-size: 18px; /* Default font size */
+    padding: 10px 20px; /* Add padding to buttons */
+    background-color: #272c30; /* Button background color */
+    color: white; /* Button text color */
+    border: none; /* Remove default borders */
+    border-radius: 4px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s ease; /* Smooth hover transition */
+}
+
+    button:hover,
+    .btn:hover {
+        background-color: #1a1c1f; /* Darker background on hover */
+    }
+
+/* Link buttons */
+.btn-link {
+    font-size: 18px; /* Font size for link buttons */
+    color: #d8e0e8; /* Light color */
+    text-decoration: underline; /* Underline link */
+    background-color: transparent; /* Remove background */
+    border: none; /* Remove border */
+}
+
+    .btn-link:hover {
+        color: #ffffff; /* White color on hover */
+    }
+
+/* Error message styles */
+.alert-danger {
+    background-color: #d9534f; /* Red background */
+    color: white; /* White text */
+    padding: 10px; /* Padding for better spacing */
+    border-radius: 4px; /* Rounded corners */
+}
+
+/* Form labels */
+label {
+    font-size: 18px; /* Default font size for labels */
+    margin-bottom: 5px; /* Add space below labels */
+    color: #d8e0e8; /* Light color for form labels */
+}
+
 /* Custom styles for the navbar */
 .navbar {
     z-index: 100; /* Nav bar in front */
+    padding: 0.5rem 1rem; /* Reduce the vertical padding to shrink the navbar height */
+    height: auto; /* Allow the navbar to adjust its height automatically */
 }
+
+/* Increase font size for navbar links */
+.navbar-nav .nav-link {
+    font-size: 1.2rem; /* Increase font size */
+    font-weight: bold; /* Make text bolder for readability */
+    padding: 0.5rem 1rem; /* Adjust padding to ensure good spacing */
+}
+
+    /* Increase icon size */
+    .navbar-nav .nav-link i {
+        font-size: 1.5rem; /* Increase icon size */
+        margin-right: 8px; /* Add space between icon and text */
+    }
+
+
+/* Increase the font size of the brand text */
+.navbar-brand {
+    font-size: 2rem; /* Adjust the size to your preference */
+    font-weight: bold; /* Make it bold for better visibility */
+    color: #ffffff; /* Ensure it stays white, or choose another color */
+    letter-spacing: 0.05em; /* Adds a bit of space between letters */
+    padding: 0;
+    margin: 0;
+    line-height: 1.2; /* Adjust line height to avoid unnecessary vertical space */
+}
+
 
 .searchResultHeader {
     font-size: 70px;
@@ -23,26 +151,19 @@
 }
 
 .container-fluid {
-    padding-top: 30px; /* Height of the fixed navbar */
+    padding-top: 20px; /* Height of the fixed navbar */
 }
 
 .content {
-    margin-left: 270px;
+    margin-left: 250px; /* margin to acommodate left sidebar */
+    margin-top: 20px; /* margin to acommodate upper navbar */
     padding: 20px;
-}
-
-body {
-    background-color: #5c656e; 
-    color: ghostwhite; 
-    font-family: 'Comic Sans MS'; /* Default font here */
-    margin-top: 5px; /* Adjust in case of navbar bamboozle */
 }
 
 .remove-favorite {
     background-color: #8d97a1;
     border: none;
 }
-
 
 /*pagination for list views*/
 
@@ -85,4 +206,22 @@ body {
     margin: 0;
 }
 
+
+/*Error messages eg user creation*/
+.text-danger {
+    color: #ff4d4f; /* Red color for errors */
+    font-size: 1.2rem; /* Make the font slightly larger */
+    background-color: #ffe6e6; /* Light red background for better readability */
+    padding: 10px; /* Add padding around the text */
+    border-radius: 4px; /* Slightly round the corners */
+    margin-bottom: 0px; /* Add some spacing below the error message */
+    display: block; /* Ensure it takes full width */
+}
+    /* Hide background and padding if there's no content */
+    .text-danger:empty {
+        background-color: transparent;
+        padding: 0;
+        margin-bottom: 0;
+        min-height: 50px; /* Ensures the space remains even if empty */
+    }
 

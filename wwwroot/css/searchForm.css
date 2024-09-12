@@ -1,18 +1,19 @@
 ﻿/*TODO:     Find a way to override the autofill psuedoclass*/
 
 
-/*Entire Searvh Sidebar*/
+/*Entire Search Sidebar*/
 .sidebar {
     margin-top: 45px; /* Ensure sidebar starts below the navbar */
     position: fixed;
-    top: 40px; /* Account for the navbar height */
+    top: 35px; /* Account for the navbar height */
     left: 0px;
-    width: 250px;
+    width: 290px;
     height: calc(100% - 70px);
     background-color: #41484f;
     padding: 20px;
     box-shadow: 2px 0 5px rgba(0,0,0,0.1);
     overflow-y: auto;
+    font-size: 20px;
 }
 /* From Darkest to ligthest cheatsheet:
 
@@ -30,16 +31,21 @@
     margin-right: 3px;
     color: ghostwhite;
 }
-    /*Search... input*/
+    /* Search input default state */
     .search-form input[type="text"],
     .search-form input[type="number"] {
         margin-bottom: 10px;
         padding: 10px;
-        font-size: 16px;
+        font-size: 20px;
         color: white;
         background-color: #8d97a1;
-        width: 210px;
+        width: 250px;
+        border-radius: 4px; /* Rounded corners */
+        border: 2px solid #8d97a1; /* Keep the default border to match the background */
+        transition: border-color 0.3s ease; /* Smooth transition for border */
     }
+
+
     .search-form input[type="text"]::placeholder,
     .search-form input[type="number"]::placeholder {
         color: lightgray;
@@ -81,6 +87,7 @@
         }
         /*Movies, Series, People. Base*/
         .search-form .toggle-buttons label {
+            font-size: 20px;
             padding: 8px;
             padding-top: 10px;
             padding-bottom: 10px;
@@ -111,7 +118,7 @@
     /* Search button */
     .search-form button {
         padding: 10px;
-        font-size: 16px;
+        font-size: 20px;
         background-color: #272c30; /* Original background */
         color: white;
         border: none;
@@ -125,6 +132,12 @@
             background-color: #1a1c1f; /* Darker background on hover */
         }
 
+        .search-form .toggle-buttons label i,
+        .search-form button i {
+            margin-right: 8px; /* Adds spacing between the icon and the text */
+            font-size: 35px; /* Make icons slightly larger */
+        }
+
 #advancedSearchOptions {
     margin-top: 10px;
 }
@@ -133,24 +146,8 @@
     margin-top: 20px;
     font-size: 15px;
     margin-left: 3px;
-    
-    /* toggle to see area of checkbox.... still havent managed to allign the text and the box*/
-    /*
-    width: 180px;
-    height: 30px;
-    background-color: red;
-    border-radius: 5px;
-    border: 3px solid lightgray;
-    */
+    font-size: 20px;
 }
-
-/* giving the text a seperate ID didnt work either
-#advancedSearchCheckboxText {
-
-    padding-top: px;
-    
-}
-*/
 
 .hidden-element {
     visibility: hidden;
