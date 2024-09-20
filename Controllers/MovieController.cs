@@ -48,7 +48,8 @@ namespace TMDB2.Controllers
 				{
 					url += $"&primary_release_year={year}";
 				}
-                else
+
+                if(year == null && actorId == null && genreId == null)
                 {
                     url = $"https://api.themoviedb.org/3/trending/movie/day?language=en-US&page={page}&api_key={apiKey}";
                 }

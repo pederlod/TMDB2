@@ -31,76 +31,57 @@ public class UserController : Controller
     [HttpPost]
     public IActionResult Create(User user)
     {
-        Console.WriteLine("Attempting to create user.  USER ID: Auto Incremented, USER NAME: " + user.UserName + ", USER PASSWORD: " + user.Password);
+        Console.WriteLine("Attempting to create user. USER ID: Auto Incremented, USER NAME: " + user.UserName + ", USER PASSWORD: " + user.Password);
 
-        // Generate salt, and hash password
-
-        byte[] salt = GenerateSalt();
-
-        user.Salt = salt;
-
-        user.Password = HashPasswordWithSalt(user.Password, salt);
-
-
-
-        // Clear ModelState errors related to the salt if any were added during binding
-        ModelState.Clear();
-
-        // Manually validate the model again after setting the salt and hashed password
-        TryValidateModel(user);
-
-        Console.WriteLine("Is ModelStateUpdated?.  USER ID: Auto Incremented, USER NAME: " + user.UserName + ", USER PASSWORD: " + user.Password + ", USER SALT: " + user.Salt);
-
-        if (ModelState.IsValid)
+        if (String.IsNullOrEmpty(user.UserName) || String.IsNullOrEmpty(user.Password))
         {
-            Console.WriteLine("USER ModelState IS VALID");
-
-            try
-            {
-                // Add the new user to the database context
-                _context.Users.Add(user);
-
-                // Save changes to the database
-                _context.SaveChanges();
-
-                Console.WriteLine("USER ID: " + user.Iduser + ", USER NAME: " + user.UserName + "USER PASSWORD: " + user.Password);
-
-                // Return to the Login action
-                return RedirectToAction("Login");
+            if (String.IsNullOrEmpty(user.UserName)){
+                ModelState.AddModelError("UserName", "Username is required.");
             }
-            catch (MySqlException ex) // Catch MySQL-specific exceptions
+            if (String.IsNullOrEmpty(user.Password))
             {
-                // Check if the exception is a duplicate entry error
-                if (ex.Number == 1062) // MySQL error code for duplicate entry
-                {
-                    ModelState.AddModelError("UserName", "This username is already taken. Please choose another one.");
-                }
-                else
-                {
-                    ModelState.AddModelError("", "An error occurred while creating the user. Please try again.");
-                }
+                ModelState.AddModelError("Password", "Password is required.");
             }
-            catch (Exception ex) // Catch other potential errors
-            {
-                ModelState.AddModelError("", "An unexpected error occurred: " + ex.Message);
-            }
+            return View("CreateUser");
         }
-        else
+        
+
+        try
         {
-            Console.WriteLine("USER ModelState IS INVALID");
+            // Generate salt, hash the password
+            byte[] salt = GenerateSalt();
+            user.Salt = salt;
+            user.Password = HashPasswordWithSalt(user.Password, salt);
 
-            // Log validation errors
-            foreach (var state in ModelState)
-            {
-                foreach (var error in state.Value.Errors)
-                {
-                    Console.WriteLine($"Error in {state.Key}: {error.ErrorMessage}");
-                }
-            }
+            // Add user to the database
+            _context.Users.Add(user);
+            _context.SaveChanges();
+
+            return RedirectToAction("Login");
         }
+        catch (DbUpdateException ex) // Catch Entity Framework database update exceptions
+        {
+            Console.WriteLine($"DbUpdateException: {ex.Message}");
 
-        return View("CreateUser"); // Return to the same view with validation errors
+            // Check if it's a unique constraint violation
+            if (ex.InnerException != null && ex.InnerException.Message.Contains("Duplicate"))
+            {
+                ModelState.AddModelError("UserName", "This username is already taken. Please choose another one.");
+            }
+            else
+            {
+                ModelState.AddModelError("", "An error occurred while creating the user. Please try again.");
+            }
+
+            return View("CreateUser"); // Return the view with errors
+        }
+        catch (Exception ex) // Catch other potential errors
+        {
+            ModelState.AddModelError("", "An unexpected error occurred: " + ex.Message);
+            return View("CreateUser");
+        }
     }
+
 
     public IActionResult Login()
     {

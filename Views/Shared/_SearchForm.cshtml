@@ -3,25 +3,35 @@
 }
 
 <div class="search-form">
-
     <form id="searchForm" method="get">
         <input type="text" id="query" name="query" placeholder="Search..." />
 
         <div class="toggle-buttons">
             <input type="radio" id="searchMovies" name="searchType" value="Movies" checked />
-            <label for="searchMovies">Movies</label>
+            <label for="searchMovies">
+                <i class="fas fa-clapperboard"></i> Movies
+            </label>
+
             <input type="radio" id="searchSeries" name="searchType" value="Series" />
-            <label for="searchSeries">Series</label>
+            <label for="searchSeries">
+                <i class="fas fa-film"></i> Series
+            </label>
+
             <input type="radio" id="searchPeople" name="searchType" value="People" />
-            <label for="searchPeople">People</label>
+            <label for="searchPeople">
+                <i class="fas fa-users"></i> People
+            </label>
         </div>
 
-
-        <button type="submit">Search</button>
+        <button type="submit">
+            <i class="fas fa-magnifying-glass"></i> Search
+        </button>
 
         <div id="advancedSearchToggle" style="display: none;">
             <input type="checkbox" id="advancedSearchCheckbox" />
-            <label for="advancedSearchCheckbox" id="advancedSearchCheckboxText"><q>Advanced</q> Search</label>
+            <label for="advancedSearchCheckbox" id="advancedSearchCheckboxText">
+                <q>Advanced</q> Search
+            </label>
         </div>
 
         <div id="advancedSearchOptions" style="display: none;">
@@ -32,10 +42,9 @@
             <span>Release Year</span>
             <input type="number" id="year" name="year" placeholder="(e.g., 2003)" />
         </div>
-
-        
     </form>
 </div>
+
 
 <script>
     document.getElementById('searchForm').onsubmit = function () {

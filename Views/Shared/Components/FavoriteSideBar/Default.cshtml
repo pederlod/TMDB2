@@ -20,7 +20,7 @@
                     {
                         <img src="https://via.placeholder.com/92x138?text=No+Image" alt="No Image" class="poster-thumbnail" />
                     }
-                    @movie.Title
+                    @* @movie.Title *@ <!-- Trying out UI without title -->
                 </a>
                 <button class="btn btn-danger btn-sm remove-favorite" data-id="@movie.Id" data-type="movie">X</button>
             </li>
@@ -41,7 +41,7 @@
                     {
                         <img src="https://via.placeholder.com/92x138?text=No+Image" alt="No Image" class="poster-thumbnail" />
                     }
-                    @series.Name
+                    @* @series.Name *@ <!-- Trying out UI without title -->
                 </a>
                 <button class="btn btn-danger btn-sm remove-favorite" data-id="@series.Id" data-type="series">X</button>
             </li>
