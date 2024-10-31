@@ -19,7 +19,7 @@ namespace TMDB2.Controllers
         // Person search result display view
         public async Task<IActionResult> Search(string query, int page = 1)
         {
-            var apiKey = "bf1f911dcc8d683db6962773bd88ca51";
+            var apiKey = "Original ApiKey, Do Not Steal";
             string url;
 
             // if nothing is searched for, bring out trending

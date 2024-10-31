@@ -12,8 +12,6 @@ namespace TMDB2.Models
 
         //Todo:  Genre,  ProductionCompany, Productioncountry, spoken language is also used by Series. Create seperate models???
 
-        // Might need to update JsonProperty
-
         [Key]
         [Column("idmovies")]
         public int Id { get; set; }
@@ -28,8 +26,6 @@ namespace TMDB2.Models
 
         //Many to many relationship with User
         public ICollection<FavoriteMovie> FavoriteMovies { get; set; }
-
-
 
         // As i only save 3 variablesin my local database, i have to delcare         [NotMapped] before all the other variables......  consider looking into partial classes
 
