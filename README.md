@@ -91,9 +91,3 @@ Run the Project:
 In Visual Studio, click the Run button (green triangle) or press F5.
 This should start the project, and your browser will automatically open to the application.
 
-FAQ
-Why is my MySQL connection failing?
-Ensure that MySQL Server is running and that the connection string in appsettings.json matches your MySQL credentials.
-How do I reset my MySQL database?
-You can drop and recreate the tmdb_users schema or re-import the Dump20240827.sql file following the instructions under Set Up MySQL Database.
-
